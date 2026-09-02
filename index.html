@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English III · the line</title>
+<meta name="description" content="Junior English III at Shawnee, a line on the Junction. Stories about power, and how they decide which words survive. Beowulf, 1984, Home Fire, and Macbeth.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F1829; --navy-2:#16213A; --navy-3:#1C2A47;
+    --brass:#C9A24B; --brass-bright:#E3C374;
+    --parchment:#EDE6D6; --parchment-dim:#A9A38F;
+    --slate:#2B3A57;
+    --paper:#F3EEE2; --ink:#22201A; --ink-dim:#5B5647;
+    --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
+    --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+    --radius:10px;
+    --motion:1;
+  }
+  html.hc{
+    --navy:#000000; --navy-2:#0A0A0A; --navy-3:#141414;
+    --brass:#FFD866; --brass-bright:#FFE799;
+    --parchment:#FFFFFF; --parchment-dim:#D8D8D8;
+    --slate:#4A4A4A; --paper:#FFFFFF; --ink:#000000; --ink-dim:#333333;
+  }
+  html.rm{ --motion:0; }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html.rm{scroll-behavior:auto;}
+  body{
+    margin:0; background:var(--navy); color:var(--parchment);
+    font-family:var(--serif); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  html.big body{ font-size:20px; }
+  a{color:var(--brass); text-decoration-color:rgba(201,162,75,.5);}
+  a:hover{color:var(--brass-bright);}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--brass-bright); outline-offset:3px;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
+  .mono{font-family:var(--mono);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.02em;
+    color:var(--parchment-dim); margin:0 0 10px;
+  }
+
+  /* header */
+  header.top{
+    border-bottom:1px solid var(--slate); padding:18px 0;
+    position:sticky; top:0; background:var(--navy); z-index:10;
+  }
+  .top-row{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .line-id{font-family:var(--mono); font-size:15px; letter-spacing:.02em; color:var(--parchment);}
+  .line-id b{color:var(--brass);}
+  .back-link{font-family:var(--mono); font-size:13px; white-space:nowrap;}
+
+  /* hero */
+  .hero{padding:56px 0 20px;}
+  .breadcrumb{font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim); margin-bottom:22px;}
+  .breadcrumb a{color:var(--parchment-dim);}
+  h1{
+    font-family:var(--serif); font-weight:600; font-size:clamp(28px,4.6vw,40px);
+    line-height:1.15; margin:0 0 22px; max-width:14ch;
+  }
+  h1 em{font-style:italic; color:var(--brass);}
+  .thesis{max-width:60ch; font-size:18px; color:var(--parchment); margin:0 0 8px;}
+  .thesis b{color:var(--brass-bright); font-weight:600;}
+  .conductor-line{font-family:var(--mono); font-size:13px; color:var(--parchment-dim); margin:28px 0 14px;}
+
+  /* photo empty-state */
+  .photo-slot{
+    border:1.5px dashed var(--slate); border-radius:var(--radius);
+    padding:26px; display:flex; flex-direction:column; gap:6px;
+    max-width:340px; color:var(--parchment-dim);
+  }
+  .photo-slot .fname{font-family:var(--mono); font-size:12px; color:var(--brass);}
+  .photo-slot .note{font-size:14px; margin:0;}
+  .status-line{
+    font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim);
+    border-top:1px solid var(--slate); border-bottom:1px solid var(--slate);
+    padding:14px 0; margin:36px 0 0;
+  }
+
+  /* departures */
+  section.departures{padding:44px 0 8px;}
+  .dep-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--slate);}
+  .dep{
+    display:grid; grid-template-columns:44px 1fr auto; gap:18px;
+    align-items:baseline; padding:20px 0; border-bottom:1px solid var(--slate);
+  }
+  .dep-num{font-family:var(--mono); color:var(--brass); font-size:15px;}
+  .dep-body h3{margin:0 0 6px; font-size:18px; font-weight:600;}
+  .dep-body p{margin:0; color:var(--parchment-dim); font-size:15.5px; max-width:50ch;}
+  .dep-status{
+    font-family:var(--mono); font-size:11.5px; color:var(--parchment-dim);
+    white-space:nowrap; align-self:start; padding-top:3px;
+  }
+  .order-note{
+    font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim);
+    margin:16px 0 0;
+  }
+
+  /* notices */
+  section.notices{padding:52px 0 8px;}
+  .notice{
+    background:var(--paper); color:var(--ink); border-radius:var(--radius);
+    padding:26px 28px; margin:18px 0;
+  }
+  .notice h3{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.02em;
+    text-transform:none; margin:0 0 14px; color:var(--ink-dim);
+  }
+  .notice ul{margin:0; padding-left:20px;}
+  .notice li{margin:0 0 10px; font-size:15.5px;}
+  .notice li:last-child{margin-bottom:0;}
+  .notice a{color:#8A5A1C;}
+  .notice .fine{font-size:13.5px; color:var(--ink-dim); margin-top:16px; padding-top:14px; border-top:1px solid #DDD5C2;}
+
+  /* transfers */
+  section.transfers{padding:52px 0 8px;}
+  table{width:100%; border-collapse:collapse; font-size:14.5px;}
+  th{
+    font-family:var(--mono); font-size:11.5px; text-align:left; color:var(--parchment-dim);
+    font-weight:400; padding:0 0 10px; border-bottom:1px solid var(--slate);
+  }
+  td{padding:12px 0; border-bottom:1px solid var(--slate); vertical-align:baseline;}
+  .status-open{color:#7FB08A;}
+  .status-plan{color:var(--parchment-dim);}
+
+  /* footer */
+  footer{padding:40px 0 60px; margin-top:20px;}
+  .foot-row{
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px; font-family:var(--mono); font-size:13px; color:var(--parchment-dim);
+    border-top:1px solid var(--slate); padding-top:22px;
+  }
+
+  /* accessibility bar */
+  .a11y{
+    max-width:760px; margin:0 auto; padding:10px 24px;
+    display:flex; gap:14px; flex-wrap:wrap; font-family:var(--mono); font-size:12px;
+  }
+  .a11y button{
+    background:none; border:1px solid var(--slate); color:var(--parchment-dim);
+    padding:6px 10px; border-radius:6px; cursor:pointer; font-family:var(--mono); font-size:12px;
+  }
+  .a11y button:hover{color:var(--parchment); border-color:var(--brass);}
+  .a11y button[aria-pressed="true"]{color:var(--navy); background:var(--brass); border-color:var(--brass);}
+
+  /* trailers */
+  .trailer-toggle{
+    grid-column:1 / -1; margin-top:10px; width:max-content;
+    background:none; border:1px solid var(--slate); color:var(--brass);
+    font-family:var(--mono); font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;
+  }
+  .trailer-toggle:hover{border-color:var(--brass); color:var(--brass-bright);}
+  .trailer-toggle[aria-expanded="true"]{color:var(--brass-bright);}
+  .trailer-embed{
+    grid-column:1 / -1; margin-top:14px; position:relative; width:100%;
+    padding-bottom:56.25%; height:0; overflow:hidden; border-radius:var(--radius); display:none;
+  }
+  .trailer-embed.open{display:block;}
+  .trailer-embed iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0;}
+  .trailer-note{grid-column:1 / -1; margin:6px 0 0; font-family:var(--mono); font-size:11.5px; color:var(--parchment-dim);}
+  .trailer-empty{
+    grid-column:1 / -1; margin-top:10px; border:1.5px dashed var(--slate); border-radius:8px;
+    padding:10px 14px; font-family:var(--mono); font-size:12px; color:var(--parchment-dim);
+  }
+
+  @media (max-width:560px){
+    .dep{grid-template-columns:32px 1fr; }
+    .dep-status{grid-column:2; }
+    table, thead, tbody, tr, th, td{display:block;}
+    thead{display:none;}
+    table{border-top:1px solid var(--slate);}
+    tr{border-bottom:1px solid var(--slate); padding:12px 0;}
+    td{border:none; padding:2px 0;}
+    td::before{
+      content:attr(data-label) ": "; font-family:var(--mono);
+      font-size:11px; color:var(--parchment-dim);
+    }
+  }
+</style>
+</head>
+<body>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
+  English III line page: a course overview, six stops still being planned, and a plain notice for families about attendance, phones, grades, and academic honesty.
+</h2>
+
+<header class="top">
+  <div class="wrap top-row">
+    <span class="line-id"><b>EN III</b> · the line</span>
+    <a class="back-link" href="https://shawneehub.netlify.app/">↩ Transfer to the Junction</a>
+  </div>
+</header>
+
+<div class="a11y" role="group" aria-label="Accessibility settings">
+  <button type="button" id="btn-big" aria-pressed="false">Larger text</button>
+  <button type="button" id="btn-hc" aria-pressed="false">High contrast</button>
+  <button type="button" id="btn-rm" aria-pressed="false">Reduce motion</button>
+  <button type="button" id="btn-reset">Reset</button>
+</div>
+
+<main>
+  <section class="hero wrap">
+    <p class="breadcrumb">III // Line · English III · <a href="https://shawneehub.netlify.app/">From The Junction ↩</a></p>
+    <h1>The line starts here.</h1>
+    <p class="thesis">Junior English follows one big idea all year: every story about power is also a story about which words survive. This line follows that idea from a dragon's price list, to a tyrant's dictionary, to a stolen crown, then turns the same question back on the students in the room. Most days open with a knights-and-knaves puzzle or a thought experiment to sharpen critical thinking, and media criticism runs through the whole year. The last stop is their own writing, judged by the same rules as everyone else's.</p>
+
+    <p class="conductor-line">Conductor / Mr. Casey</p>
+    <p class="conductor-line" style="margin-top:14px;">Just need the practical stuff? → <a href="/syllabus/">Syllabus &amp; expectations</a></p>
+  </section>
+
+  <section class="departures wrap">
+    <p class="eyebrow">// Departures · the line</p>
+    <ol class="dep-list">
+      <li class="dep">
+        <span class="dep-num mono">01</span>
+        <div class="dep-body">
+          <h3>Rhetoric</h3>
+          <p>Not decoration. The basic structure that holds up every argument.</p>
+        </div>
+        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="5xNlNV-UIUs">▶ Trailer</button>
+        <div class="trailer-embed"></div>
+        <p class="trailer-note">Twelve Angry Men, 1957. One juror votes not guilty against eleven others, then has to build a case for it, one person at a time.</p>
+      </li>
+      <li class="dep">
+        <span class="dep-num mono">02</span>
+        <div class="dep-body">
+          <h3>1984</h3>
+          <p>Not the cameras. The dictionary.</p>
+        </div>
+        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="2zfqw8nhUwA">▶ Trailer</button>
+        <div class="trailer-embed"></div>
+        <p class="trailer-note">Apple's famous 1984 ad: advertising, its own kind of propaganda, borrowing Orwell's ideas to sell a computer.</p>
+      </li>
+      <li class="dep">
+        <span class="dep-num mono">03</span>
+        <div class="dep-body">
+          <h3>Home Fire</h3>
+          <p>Whose grief the world takes seriously, and whose gets called a threat instead.</p>
+        </div>
+        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="3fFG0wYyR0Q">▶ Trailer</button>
+        <div class="trailer-embed"></div>
+        <p class="trailer-note">A 2019 film, also called Antigone, that moves the same myth into modern Montreal: a brother's death, a family standing against the state to bury him properly.</p>
+      </li>
+      <li class="dep">
+        <span class="dep-num mono">04</span>
+        <div class="dep-body">
+          <h3>Beowulf</h3>
+          <p>The dragon's the least interesting part. What happens after the killing (who owes what) is the real point.</p>
+        </div>
+        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="QT5nja2Wy28">▶ Trailer</button>
+        <div class="trailer-embed"></div>
+        <p class="trailer-note">The British Library reading Beowulf's opening lines aloud, in the actual Old English it was written in.</p>
+      </li>
+      <li class="dep">
+        <span class="dep-num mono">05</span>
+        <div class="dep-body">
+          <h3>Macbeth</h3>
+          <p>A stolen crown, and a price that never stops climbing.</p>
+        </div>
+        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="zGbZCgHQ9m8">▶ Trailer</button>
+        <div class="trailer-embed"></div>
+        <p class="trailer-note">Ian McKellen, 1979, breaking down "tomorrow, and tomorrow, and tomorrow" line by line: what the words are actually doing, not just what they mean.</p>
+      </li>
+      <li class="dep">
+        <span class="dep-num mono">06</span>
+        <div class="dep-body">
+          <h3>Personal narrative</h3>
+          <p>Every argument up to this point was about somebody else's words. This one's about yours.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="notices wrap">
+    <p class="eyebrow">// Notices</p>
+    <div class="notice">
+      <h3>For families, plainly</h3>
+      <ul>
+        <li><b>Attendance:</b> miss more than nine unexcused days in a full-year class, and you don't get credit for that class. That's district policy, not something made up just for this class.</li>
+        <li><b>Devices:</b> phones go in the classroom's phone caddy (a small storage rack) during class time. New this year, districtwide: phones stay away from the first bell to the last, all day, not just in this class.</li>
+        <li><b>Grading:</b> grades are based on percentages. For the first three marking periods, the lowest grade possible on anything is 50%, even if the real score was lower. Grades are about the schoolwork itself, not about behavior in class.</li>
+        <li><b>Academic honesty:</b> cheating and plagiarism both start with a zero the first time it happens. That includes using AI tools without permission.</li>
+        <li><b>Homework:</b> there isn't much of it, on purpose. Most of it is grammar practice and reading. When there's a reading check, it's just to see if the reading got done, not a hard test.</li>
+      </ul>
+      <p class="fine">The full policy is written out in the LRHSD student handbook. Questions → <a href="https://shawneehub.netlify.app/pages/contact">Contact</a>.</p>
+    </div>
+  </section>
+
+  <section class="transfers wrap">
+    <p class="eyebrow">// Transfers</p>
+    <table>
+      <thead><tr><th>Track</th><th>Destination</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Track">↩ Terminal</td><td data-label="Destination">The Junction <span class="mono" style="color:var(--parchment-dim);">· main hub</span></td><td data-label="Status" class="status-open mono">→ now</td></tr>
+        <tr><td data-label="Track">Sister line</td><td data-label="Destination">English IV <span class="mono" style="color:var(--parchment-dim);">· senior line</span></td><td data-label="Status" class="status-plan mono">→ in construction</td></tr>
+        <tr><td data-label="Track">Sister line</td><td data-label="Destination">English II <span class="mono" style="color:var(--parchment-dim);">· sophomore line</span></td><td data-label="Status" class="status-open mono">→ open</td></tr>
+        <tr><td data-label="Track">Transfer</td><td data-label="Destination">Shawnee Media Lab <span class="mono" style="color:var(--parchment-dim);">· the propaganda model</span></td><td data-label="Status" class="status-open mono">→ open</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer class="wrap">
+    <div class="foot-row">
+      <span>EN III · Casey</span>
+      <a href="https://shawneehub.netlify.app/pages/contact">Contact</a>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+  var html = document.documentElement;
+  var map = { big:'btn-big', hc:'btn-hc', rm:'btn-rm' };
+  function apply(){
+    Object.keys(map).forEach(function(cls){
+      var on = localStorage.getItem('en3-'+cls) === '1';
+      html.classList.toggle(cls, on);
+      document.getElementById(map[cls]).setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  Object.keys(map).forEach(function(cls){
+    document.getElementById(map[cls]).addEventListener('click', function(){
+      var on = localStorage.getItem('en3-'+cls) === '1';
+      localStorage.setItem('en3-'+cls, on ? '0' : '1');
+      apply();
+    });
+  });
+  document.getElementById('btn-reset').addEventListener('click', function(){
+    Object.keys(map).forEach(function(cls){ localStorage.removeItem('en3-'+cls); });
+    apply();
+  });
+  apply();
+
+  document.querySelectorAll('.trailer-toggle').forEach(function(btn){
+    var embed = btn.nextElementSibling;
+    btn.addEventListener('click', function(){
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      if (open){
+        embed.classList.remove('open');
+        embed.innerHTML = '';
+        btn.setAttribute('aria-expanded','false');
+        btn.textContent = '▶ Trailer';
+      } else {
+        var id = btn.getAttribute('data-video');
+        var iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id;
+        iframe.title = btn.closest('.dep').querySelector('h3').textContent + ' trailer';
+        iframe.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture';
+        iframe.loading = 'lazy';
+        embed.appendChild(iframe);
+        embed.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+        btn.textContent = '▲ Close';
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
