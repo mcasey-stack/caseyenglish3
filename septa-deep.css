@@ -1,0 +1,62 @@
+/* ============================================================
+   SEPTA-flavor overlay — English III — DEEP layer
+   Sibling to septa.css. Loaded AFTER it so this layers on top
+   of the existing chrome overlay.
+
+   Goal: push the subway feel from the chrome (nav, hero, route,
+   transfers) deeper into the BODY. No content, structure, or
+   size changes; aesthetic only.
+
+   E3 is green dominant with El blue as the secondary. The
+   two-dot motif reads green on the left (this line), blue on
+   the right (English IV, the line it runs into).
+
+   To revert: delete the <link> tag in each E3 .html and delete
+   this file.
+   ============================================================ */
+
+:root {
+  --deep-primary:        var(--line);
+  --deep-primary-soft:   var(--line-soft);
+  --deep-secondary:      var(--septa-blue, #0E8FC2);
+  --deep-secondary-soft: var(--septa-blue-soft, rgba(14,143,194,0.14));
+}
+
+/* ─── TRANSFER MARKER ───────────────────────────────────────
+   Two-dot badge centered on each caution-stripe divider.
+   Green (this line) left; El blue (English IV) right. Reads as
+   "two lines cross at this point."
+   ─── */
+.caution-stripe { overflow: visible; }
+.caution-stripe::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px; height: 24px;
+  background-color: #0D120F;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 24'><line x1='18' y1='12' x2='46' y2='12' stroke='%239AAA9E' stroke-width='1.4' opacity='0.55'/><circle cx='22' cy='12' r='6' fill='%231B9E57' stroke='%230D120F' stroke-width='1.4'/><circle cx='42' cy='12' r='5' fill='%230E8FC2' stroke='%230D120F' stroke-width='1.4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 64px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(230, 237, 230, 0.08),
+    0 2px 10px rgba(0, 0, 0, 0.45);
+  z-index: 3;
+  pointer-events: none;
+}
+@media (max-width: 540px) {
+  .caution-stripe::after { width: 54px; height: 22px; background-size: 54px 22px; }
+}
+
+/* ─── PLATFORM POSTERS ──────────────────────────────────────
+   Each unit poster gets a thin line-colored rule along its top,
+   the way a platform poster sits under its line's band.
+   ─── */
+.poster { border-top: 3px solid var(--deep-primary); }
+
+/* ─── BODY-LINK SUBWAY ACCENT ─────────────────────────────── */
+a.inline { border-bottom-style: dotted; }
+a.inline:hover { border-bottom-style: solid; }

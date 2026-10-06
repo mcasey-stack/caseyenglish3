@@ -3,284 +3,885 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English III · the line</title>
-<meta name="description" content="Junior English III at Shawnee, a line on the Junction. Stories about power, and how they decide which words survive. Beowulf, 1984, Home Fire, and Macbeth.">
+<title>English III — the line</title>
+<meta name="description" content="Junior English III at Shawnee, a line on the Junction. Stories about power, and how they decide which words survive. Rhetoric, 1984, Home Fire, Beowulf, Macbeth.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0D120F">
+<link rel="canonical" href="https://caseyenglish3.netlify.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Junction">
+<meta property="og:title" content="English III — the line">
+<meta property="og:description" content="Junior English III at Shawnee. Every story about power is also a story about which words survive. Six stops: rhetoric, 1984, Home Fire, Beowulf, Macbeth, and your own writing.">
+<meta property="og:url" content="https://caseyenglish3.netlify.app/">
+<meta property="og:image" content="https://caseyenglish3.netlify.app/img/og-card.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Conductor busking with an accordion on a green-tiled subway platform, under the words English III — the line.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="English III — the line">
+<meta name="twitter:description" content="Junior English III at Shawnee. Every story about power is also a story about which words survive.">
+<meta name="twitter:image" content="https://caseyenglish3.netlify.app/img/og-card.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --navy:#0F1829; --navy-2:#16213A; --navy-3:#1C2A47;
-    --brass:#C9A24B; --brass-bright:#E3C374;
-    --parchment:#EDE6D6; --parchment-dim:#A9A38F;
-    --slate:#2B3A57;
-    --paper:#F3EEE2; --ink:#22201A; --ink-dim:#5B5647;
-    --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
-    --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
-    --radius:10px;
-    --motion:1;
-  }
-  html.hc{
-    --navy:#000000; --navy-2:#0A0A0A; --navy-3:#141414;
-    --brass:#FFD866; --brass-bright:#FFE799;
-    --parchment:#FFFFFF; --parchment-dim:#D8D8D8;
-    --slate:#4A4A4A; --paper:#FFFFFF; --ink:#000000; --ink-dim:#333333;
-  }
-  html.rm{ --motion:0; }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  html.rm{scroll-behavior:auto;}
-  body{
-    margin:0; background:var(--navy); color:var(--parchment);
-    font-family:var(--serif); font-size:17px; line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-  }
-  html.big body{ font-size:20px; }
-  a{color:var(--brass); text-decoration-color:rgba(201,162,75,.5);}
-  a:hover{color:var(--brass-bright);}
-  a:focus-visible, button:focus-visible{
-    outline:2px solid var(--brass-bright); outline-offset:3px;
-  }
-  .wrap{max-width:760px; margin:0 auto; padding:0 24px;}
-  .mono{font-family:var(--mono);}
-  .eyebrow{
-    font-family:var(--mono); font-size:12.5px; letter-spacing:.02em;
-    color:var(--parchment-dim); margin:0 0 10px;
-  }
+:root {
+  --bg:           #0D120F;
+  --bg-2:         #121A15;
+  --panel:        #17211B;
 
-  /* header */
-  header.top{
-    border-bottom:1px solid var(--slate); padding:18px 0;
-    position:sticky; top:0; background:var(--navy); z-index:10;
-  }
-  .top-row{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap;}
-  .line-id{font-family:var(--mono); font-size:15px; letter-spacing:.02em; color:var(--parchment);}
-  .line-id b{color:var(--brass);}
-  .back-link{font-family:var(--mono); font-size:13px; white-space:nowrap;}
+  --ink:          #E6EDE6;
+  --ink-mid:      #9AAA9E;
+  --ink-faint:    #5E6F63;
+  --ink-ghost:    #38443C;
 
-  /* hero */
-  .hero{padding:56px 0 20px;}
-  .breadcrumb{font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim); margin-bottom:22px;}
-  .breadcrumb a{color:var(--parchment-dim);}
-  h1{
-    font-family:var(--serif); font-weight:600; font-size:clamp(28px,4.6vw,40px);
-    line-height:1.15; margin:0 0 22px; max-width:14ch;
-  }
-  h1 em{font-style:italic; color:var(--brass);}
-  .thesis{max-width:60ch; font-size:18px; color:var(--parchment); margin:0 0 8px;}
-  .thesis b{color:var(--brass-bright); font-weight:600;}
-  .conductor-line{font-family:var(--mono); font-size:13px; color:var(--parchment-dim); margin:28px 0 14px;}
+  --rule:         rgba(230,237,230,0.10);
+  --rule-strong:  rgba(230,237,230,0.20);
 
-  /* photo empty-state */
-  .photo-slot{
-    border:1.5px dashed var(--slate); border-radius:var(--radius);
-    padding:26px; display:flex; flex-direction:column; gap:6px;
-    max-width:340px; color:var(--parchment-dim);
-  }
-  .photo-slot .fname{font-family:var(--mono); font-size:12px; color:var(--brass);}
-  .photo-slot .note{font-size:14px; margin:0;}
-  .status-line{
-    font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim);
-    border-top:1px solid var(--slate); border-bottom:1px solid var(--slate);
-    padding:14px 0; margin:36px 0 0;
-  }
+  /* III = subway-surface green. SEPTA brand green is #00843D;
+     brightened here to clear 4.5:1 against --bg. */
+  --line:         #1B9E57;
+  --line-bri:     #4FCB8B;
+  --line-soft:    rgba(27,158,87,0.11);
 
-  /* departures */
-  section.departures{padding:44px 0 8px;}
-  .dep-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--slate);}
-  .dep{
-    display:grid; grid-template-columns:44px 1fr auto; gap:18px;
-    align-items:baseline; padding:20px 0; border-bottom:1px solid var(--slate);
-  }
-  .dep-num{font-family:var(--mono); color:var(--brass); font-size:15px;}
-  .dep-body h3{margin:0 0 6px; font-size:18px; font-weight:600;}
-  .dep-body p{margin:0; color:var(--parchment-dim); font-size:15.5px; max-width:50ch;}
-  .dep-status{
-    font-family:var(--mono); font-size:11.5px; color:var(--parchment-dim);
-    white-space:nowrap; align-self:start; padding-top:3px;
-  }
-  .order-note{
-    font-family:var(--mono); font-size:12.5px; color:var(--parchment-dim);
-    margin:16px 0 0;
-  }
+  --serif:        'Crimson Pro', Georgia, serif;
+  --display:      'Crimson Pro', Georgia, serif;
+  --sans:         'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:         'JetBrains Mono', 'IBM Plex Mono', monospace;
 
-  /* notices */
-  section.notices{padding:52px 0 8px;}
-  .notice{
-    background:var(--paper); color:var(--ink); border-radius:var(--radius);
-    padding:26px 28px; margin:18px 0;
-  }
-  .notice h3{
-    font-family:var(--mono); font-size:12.5px; letter-spacing:.02em;
-    text-transform:none; margin:0 0 14px; color:var(--ink-dim);
-  }
-  .notice ul{margin:0; padding-left:20px;}
-  .notice li{margin:0 0 10px; font-size:15.5px;}
-  .notice li:last-child{margin-bottom:0;}
-  .notice a{color:#8A5A1C;}
-  .notice .fine{font-size:13.5px; color:var(--ink-dim); margin-top:16px; padding-top:14px; border-top:1px solid #DDD5C2;}
+  --tile-bg:      #080D0A;
+  --tile-grout:   rgba(230,237,230,0.05);
+  --bead-bg:      #0D120F;
 
-  /* transfers */
-  section.transfers{padding:52px 0 8px;}
-  table{width:100%; border-collapse:collapse; font-size:14.5px;}
-  th{
-    font-family:var(--mono); font-size:11.5px; text-align:left; color:var(--parchment-dim);
-    font-weight:400; padding:0 0 10px; border-bottom:1px solid var(--slate);
-  }
-  td{padding:12px 0; border-bottom:1px solid var(--slate); vertical-align:baseline;}
-  .status-open{color:#7FB08A;}
-  .status-plan{color:var(--parchment-dim);}
+  --paper:        #F2EFE6;
+  --paper-ink:    #1C1F1B;
+  --paper-dim:    #5A6157;
 
-  /* footer */
-  footer{padding:40px 0 60px; margin-top:20px;}
-  .foot-row{
-    display:flex; justify-content:space-between; align-items:center;
-    flex-wrap:wrap; gap:12px; font-family:var(--mono); font-size:13px; color:var(--parchment-dim);
-    border-top:1px solid var(--slate); padding-top:22px;
-  }
+  --motion:       1;
+}
 
-  /* accessibility bar */
-  .a11y{
-    max-width:760px; margin:0 auto; padding:10px 24px;
-    display:flex; gap:14px; flex-wrap:wrap; font-family:var(--mono); font-size:12px;
-  }
-  .a11y button{
-    background:none; border:1px solid var(--slate); color:var(--parchment-dim);
-    padding:6px 10px; border-radius:6px; cursor:pointer; font-family:var(--mono); font-size:12px;
-  }
-  .a11y button:hover{color:var(--parchment); border-color:var(--brass);}
-  .a11y button[aria-pressed="true"]{color:var(--navy); background:var(--brass); border-color:var(--brass);}
+/* accessibility modes */
+html.big body { font-size: 118%; }
+html.hc {
+  --bg: #000000; --bg-2: #0A0A0A; --panel: #101010;
+  --ink: #FFFFFF; --ink-mid: #E0E0E0; --ink-faint: #BDBDBD; --ink-ghost: #8A8A8A;
+  --rule: rgba(255,255,255,0.28); --rule-strong: rgba(255,255,255,0.5);
+  --line: #37E08A; --line-bri: #7BF3B4; --line-soft: rgba(55,224,138,0.16);
+  --tile-grout: rgba(255,255,255,0.10); --bead-bg: #000000;
+  --paper: #FFFFFF; --paper-ink: #000000; --paper-dim: #333333;
+}
+html.hc body::after,
+html.hc body::before { display: none; }
+html.rm { --motion: 0; scroll-behavior: auto; }
+html.rm * { animation: none !important; transition: none !important; }
 
-  /* trailers */
-  .trailer-toggle{
-    grid-column:1 / -1; margin-top:10px; width:max-content;
-    background:none; border:1px solid var(--slate); color:var(--brass);
-    font-family:var(--mono); font-size:12px; padding:6px 12px; border-radius:6px; cursor:pointer;
-  }
-  .trailer-toggle:hover{border-color:var(--brass); color:var(--brass-bright);}
-  .trailer-toggle[aria-expanded="true"]{color:var(--brass-bright);}
-  .trailer-embed{
-    grid-column:1 / -1; margin-top:14px; position:relative; width:100%;
-    padding-bottom:56.25%; height:0; overflow:hidden; border-radius:var(--radius); display:none;
-  }
-  .trailer-embed.open{display:block;}
-  .trailer-embed iframe{position:absolute; top:0; left:0; width:100%; height:100%; border:0;}
-  .trailer-note{grid-column:1 / -1; margin:6px 0 0; font-family:var(--mono); font-size:11.5px; color:var(--parchment-dim);}
-  .trailer-empty{
-    grid-column:1 / -1; margin-top:10px; border:1.5px dashed var(--slate); border-radius:8px;
-    padding:10px 14px; font-family:var(--mono); font-size:12px; color:var(--parchment-dim);
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  @media (max-width:560px){
-    .dep{grid-template-columns:32px 1fr; }
-    .dep-status{grid-column:2; }
-    table, thead, tbody, tr, th, td{display:block;}
-    thead{display:none;}
-    table{border-top:1px solid var(--slate);}
-    tr{border-bottom:1px solid var(--slate); padding:12px 0;}
-    td{border:none; padding:2px 0;}
-    td::before{
-      content:attr(data-label) ": "; font-family:var(--mono);
-      font-size:11px; color:var(--parchment-dim);
-    }
-  }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* TILE WALL — visible grout grid across the whole page background */
+body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(180deg, transparent 0, transparent 49px, var(--tile-grout) 49px, var(--tile-grout) 51px, transparent 51px, transparent 100px),
+    linear-gradient(90deg,  transparent 0, transparent 79px, var(--tile-grout) 79px, var(--tile-grout) 81px, transparent 81px, transparent 160px),
+    linear-gradient(135deg, rgba(230,237,230,0.018) 0%, transparent 50%, rgba(0,0,0,0.06) 100%);
+  background-size: 80px 50px, 80px 50px, 80px 50px;
+}
+
+/* GRIME */
+body::after {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.10;
+  mix-blend-mode: overlay;
+}
+
+/* VIGNETTE */
+body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background:
+    radial-gradient(120% 80% at 50% 10%, transparent 55%, rgba(0,0,0,0.45) 100%),
+    radial-gradient(120% 80% at 50% 90%, transparent 60%, rgba(0,0,0,0.35) 100%);
+}
+
+/* LINE STRIPE */
+.line-stripe {
+  position: fixed;
+  top: 0; bottom: 0; left: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--line) 0, var(--line) 100%);
+  box-shadow: 0 0 12px rgba(27,158,87,0.42), inset -1px 0 0 rgba(0,0,0,0.4);
+  z-index: 5;
+}
+.line-stripe::after {
+  content: "EN III";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  transform-origin: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(13,18,15,0.85);
+  white-space: nowrap;
+}
+@media (max-width: 720px) { .line-stripe { width: 4px; } .line-stripe::after { display: none; } }
+
+body > *:not(script) { position: relative; z-index: 2; }
+a { color: inherit; text-decoration: none; }
+
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 1.6rem; }
+
+/* =========================================================
+   SUBWAY — corner button + popup
+   ========================================================= */
+.sw-wrap { position: fixed; top: 14px; left: 18px; z-index: 220; }
+
+.sw-trigger {
+  display: inline-flex; align-items: center; gap: 0.55em;
+  padding: 0.5em 0.95em;
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--ink-mid);
+  background: rgba(13,18,15,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+.sw-trigger:hover, .sw-trigger:focus-visible {
+  color: var(--line); border-color: var(--line); outline: none;
+}
+
+.sw-roundel {
+  display: inline-block; width: 12px; height: 12px;
+  border-radius: 50%; border: 1.5px solid currentColor;
+  position: relative; flex-shrink: 0;
+}
+.sw-roundel::before {
+  content: ""; position: absolute;
+  left: -3px; right: -3px; top: 50%;
+  height: 1.5px; background: currentColor;
+  transform: translateY(-50%);
+}
+.sw-caret { font-size: 0.75em; opacity: 0.55; margin-left: 0.15em; }
+
+.sw-panel {
+  position: absolute; top: calc(100% + 8px); left: 0;
+  min-width: 292px;
+  background: var(--bg-2);
+  border: 1px solid var(--rule-strong);
+  border-radius: 4px;
+  padding: 0.75em 0;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+  display: none;
+  animation: sw-rise 140ms ease-out;
+}
+.sw-panel.is-open { display: block; }
+@keyframes sw-rise { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+.sw-label {
+  display: block; padding: 0 1.2em 0.5em;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--line);
+}
+.sw-item {
+  display: flex; align-items: baseline; gap: 0.7em;
+  padding: 0.5em 1.2em;
+  color: var(--ink);
+  font-family: var(--serif); font-size: 15px;
+  transition: background 100ms, color 100ms;
+}
+.sw-item:hover { background: var(--line-soft); color: var(--line-bri); }
+.sw-item .sw-num {
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.06em; color: var(--ink-faint); min-width: 1.8em;
+}
+.sw-item .sw-name { flex: 1; line-height: 1.3; }
+.sw-item.is-here { color: var(--ink-faint); pointer-events: none; }
+.sw-item.is-here::after {
+  content: "you're here";
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.10em;
+  color: var(--line); opacity: 0.85;
+}
+.sw-item.is-stub { color: var(--ink-ghost); pointer-events: none; }
+.sw-item.is-stub::after {
+  content: "in planning";
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.10em;
+  color: var(--ink-faint);
+}
+.sw-divider { height: 1px; background: var(--rule); margin: 0.45em 1.2em; }
+.sw-terminal {
+  display: block; padding: 0.55em 1.2em;
+  color: var(--line);
+  font-family: var(--serif); font-style: italic; font-size: 14.5px;
+}
+.sw-terminal:hover { background: var(--line-soft); color: var(--line-bri); }
+
+@media (max-width: 540px) {
+  .sw-wrap { top: 10px; left: 10px; }
+  .sw-trigger { padding: 0.4em 0.7em; font-size: 10px; }
+  .sw-panel { min-width: 240px; }
+}
+
+/* =========================================================
+   STATION ENTRANCE
+   ========================================================= */
+.station-entrance {
+  margin-top: 18px; margin-bottom: 18px;
+  padding: 28px 32px 26px;
+  background: linear-gradient(180deg, rgba(13,18,15,0.92) 0%, rgba(8,13,10,0.96) 100%);
+  border: 1px solid var(--rule-strong);
+  border-left: 6px solid var(--line);
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 116px 1fr auto;
+  gap: 28px; align-items: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(230,237,230,0.04);
+  position: relative;
+}
+.station-entrance::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(90deg, transparent 0, transparent 49.5%, rgba(230,237,230,0.04) 49.5%, rgba(230,237,230,0.04) 50.5%, transparent 50.5%);
+  background-size: 60px 100%;
+  pointer-events: none; border-radius: 4px;
+}
+.station-entrance .big-bullet {
+  width: 116px; height: 116px; border-radius: 50%;
+  background: var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-weight: 700;
+  font-size: 44px; letter-spacing: -0.02em; font-style: italic;
+  color: #08140C;
+  box-shadow:
+    inset 0 0 0 3px rgba(0,0,0,0.22),
+    inset 0 -10px 22px rgba(0,0,0,0.30),
+    0 6px 28px rgba(0,0,0,0.55),
+    0 0 26px rgba(27,158,87,0.30);
+  position: relative;
+}
+.station-entrance .big-bullet::after {
+  content: ""; position: absolute; inset: -1px; border-radius: 50%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='b'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23b)'/></svg>");
+  opacity: 0.22; mix-blend-mode: overlay; pointer-events: none;
+}
+.station-entrance .nameplate { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 2; }
+.station-entrance .nameplate .station-no {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--line);
+}
+.station-entrance .nameplate .station-name-big {
+  font-family: var(--sans); font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); line-height: 1;
+}
+.station-entrance .nameplate .station-sub {
+  font-family: var(--display); font-style: italic; font-weight: 400;
+  font-size: 17px; color: var(--ink-mid);
+}
+.station-entrance .arrow-to-trains {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--line); white-space: nowrap; transition: color 120ms;
+}
+.station-entrance .arrow-to-trains .from { color: var(--ink-faint); font-size: 9.5px; letter-spacing: 0.20em; }
+.station-entrance .arrow-to-trains:hover { color: var(--line-bri); }
+.station-entrance .arrow-to-trains .arr { font-size: 1.2em; transform: translateY(-1px); }
+
+@media (max-width: 720px) {
+  .station-entrance { grid-template-columns: 84px 1fr; gap: 18px; padding: 20px 20px 18px; }
+  .station-entrance .big-bullet { width: 84px; height: 84px; font-size: 32px; }
+  .station-entrance .arrow-to-trains { display: none; }
+}
+
+/* =========================================================
+   ACCESSIBILITY BAR
+   ========================================================= */
+.a11y {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  margin: 0 0 26px;
+}
+.a11y .a11y-label {
+  font-family: var(--mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  color: var(--ink-faint); margin-right: 4px;
+}
+.a11y button {
+  background: rgba(13,18,15,0.6);
+  border: 1px solid var(--rule);
+  color: var(--ink-mid);
+  padding: 5px 11px; border-radius: 999px; cursor: pointer;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  transition: color 120ms, border-color 120ms, background 120ms;
+}
+.a11y button:hover { color: var(--ink); border-color: var(--line); }
+.a11y button[aria-pressed="true"] {
+  color: #08140C; background: var(--line); border-color: var(--line);
+}
+.a11y button:focus-visible, a:focus-visible, .sw-trigger:focus-visible,
+.trailer-toggle:focus-visible {
+  outline: 2px solid var(--line-bri); outline-offset: 3px;
+}
+
+/* =========================================================
+   CAUTION STRIPE
+   ========================================================= */
+.caution-stripe {
+  height: 18px; margin: 32px 0;
+  background-image: repeating-linear-gradient(45deg, #DDB54A 0, #DDB54A 14px, #0D120F 14px, #0D120F 28px);
+  border-top: 1px solid rgba(0,0,0,0.5);
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+  position: relative;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 12px rgba(0,0,0,0.35);
+}
+.caution-stripe::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='cs'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23cs)'/></svg>");
+  opacity: 0.18; mix-blend-mode: overlay; pointer-events: none;
+}
+
+/* =========================================================
+   TERMINAL (hero)
+   ========================================================= */
+.terminal { padding: 56px 0 8px; }
+@media (max-width: 720px) { .terminal { padding: 44px 0 4px; } }
+
+h1.line-name {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(38px, 5.6vw, 60px);
+  line-height: 1.05; letter-spacing: -0.01em;
+  margin: 14px 0 0.5em; color: var(--ink);
+}
+h1.line-name em { font-style: italic; color: var(--line); font-weight: 500; }
+
+.lede {
+  font-family: var(--serif); font-size: 19px; line-height: 1.55;
+  color: var(--ink-mid); max-width: 62ch; margin-bottom: 0.5em;
+}
+.lede strong { color: var(--ink); font-weight: 500; }
+
+.signoff {
+  margin-top: 1.6em;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.10em; color: var(--ink-faint); text-transform: uppercase;
+}
+.signoff .conductor { color: var(--line); }
+
+.hero-figure {
+  max-width: 460px; margin: 26px auto 6px; padding: 0; text-align: center;
+}
+.hero-figure img {
+  width: 100%; height: auto; display: block;
+  background: var(--bg-2);
+  border-radius: 2px;
+  border: 1px solid var(--rule-strong);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+}
+.hero-figure figcaption {
+  margin-top: 9px;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-faint); line-height: 1.6;
+}
+
+.advisory {
+  margin: 24px 0 4px;
+  padding: 11px 16px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--line);
+  border-radius: 3px;
+  background: var(--line-soft);
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.plain-link {
+  margin-top: 16px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; color: var(--ink-faint);
+}
+.plain-link a {
+  color: var(--line); border-bottom: 1px dotted currentColor;
+}
+.plain-link a:hover { color: var(--line-bri); }
+
+/* =========================================================
+   BOARD + ROUTE
+   ========================================================= */
+.board { padding: 24px 0 40px; }
+.board-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  padding-bottom: 14px; margin-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.board-title {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--line);
+}
+.board-meta {
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.10em; color: var(--ink-faint);
+}
+
+.route { position: relative; padding-left: 42px; margin-top: 8px; }
+.route::before {
+  content: ""; position: absolute;
+  left: 14px; top: 34px; bottom: 34px;
+  width: 3px; background: var(--line);
+  box-shadow: 0 0 8px rgba(27,158,87,0.38);
+  border-radius: 2px;
+}
+.route .station { position: relative; }
+/* bead sits on the station NAME line, not the middle of a tall block */
+.route .station::before {
+  content: ""; position: absolute;
+  left: -36px; top: 28px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--bead-bg);
+  border: 3px solid var(--line);
+  box-shadow: inset 0 0 0 2px var(--bg), 0 0 0 1px rgba(0,0,0,0.55);
+  z-index: 2;
+}
+.route .station.is-live::before {
+  background: var(--line);
+  box-shadow: inset 0 0 0 2px var(--bg), 0 0 14px rgba(27,158,87,0.55), 0 0 0 1px rgba(0,0,0,0.55);
+}
+.route .station:not(.is-live)::before { border-color: var(--ink-ghost); }
+@media (max-width: 640px) {
+  .route { padding-left: 32px; }
+  .route::before { left: 10px; }
+  .route .station::before { left: -28px; top: 24px; width: 14px; height: 14px; }
+}
+
+.station {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 0.4em 1.4em;
+  align-items: baseline;
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.station-num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.10em; color: var(--ink-faint); }
+.station-name {
+  font-family: var(--serif); font-size: 22px; font-weight: 500;
+  color: var(--ink); line-height: 1.2;
+}
+.station-name .frame {
+  display: block; font-family: var(--sans); font-size: 13px; font-weight: 400;
+  color: var(--ink-mid); margin-top: 4px; letter-spacing: 0; line-height: 1.5;
+}
+.station-status {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint);
+}
+/* live stop: the status link stretches over the stop; the platform sits above it so the trailer button still works */
+.station.is-live .station-status { color: var(--line); }
+.station-go::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.station.is-live .platform { position: relative; z-index: 2; }
+.station-go:hover, .station-go:focus-visible,
+.station.is-live:has(.station-go:hover) .station-name { color: var(--line-bri); }
+@media (max-width: 640px) {
+  .station { grid-template-columns: 44px 1fr; }
+  .station-status { grid-column: 2; padding-top: 4px; }
+  .station-name { font-size: 18px; }
+}
+
+/* =========================================================
+   PLATFORM CARD — poster + trailer, per stop
+   ========================================================= */
+.platform {
+  grid-column: 2 / -1;
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 18px;
+  align-items: start;
+}
+/* every stop currently has a poster; this is the fallback for one that doesn't */
+.platform.no-poster { grid-template-columns: 1fr; }
+@media (max-width: 640px) {
+  .platform { grid-column: 2; grid-template-columns: 1fr; gap: 12px; }
+}
+
+.poster {
+  margin: 0; position: relative;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2px;
+  background: var(--bg-2);
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.45);
+}
+.poster img { width: 100%; height: auto; display: block; }
+.poster::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
+}
+@media (max-width: 640px) { .poster { max-width: 260px; } }
+
+.platform-body { min-width: 0; }
+
+.trailer-toggle {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  background: rgba(13,18,15,0.6);
+  border: 1px solid var(--rule-strong);
+  color: var(--line);
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 7px 13px; border-radius: 999px; cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+.trailer-toggle:hover { border-color: var(--line); color: var(--line-bri); }
+.trailer-note {
+  margin-top: 10px;
+  font-family: var(--sans); font-size: 13px; line-height: 1.55;
+  color: var(--ink-mid); max-width: 54ch;
+}
+.trailer-embed {
+  margin-top: 12px; position: relative; width: 100%;
+  padding-bottom: 56.25%; height: 0; overflow: hidden;
+  border-radius: 3px; border: 1px solid var(--rule-strong);
+  display: none; background: #000;
+}
+.trailer-embed.open { display: block; }
+.trailer-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+/* =========================================================
+   NOTICE — posted card for families
+   ========================================================= */
+.notice {
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 3px;
+  padding: 28px 30px 26px;
+  box-shadow: 0 6px 26px rgba(0,0,0,0.5);
+  position: relative;
+  max-width: 74ch;
+}
+.notice::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 5px; background: var(--line); border-radius: 3px 0 0 3px;
+}
+.notice h3 {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.20em; text-transform: uppercase;
+  margin: 0 0 16px; color: var(--paper-dim);
+}
+.notice ul { margin: 0; padding-left: 20px; }
+.notice li {
+  margin: 0 0 12px;
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+}
+.notice li:last-child { margin-bottom: 0; }
+.notice li b { font-weight: 600; }
+.notice a { color: #1A6B3F; border-bottom: 1px solid rgba(26,107,63,0.4); }
+.notice a:hover { border-bottom-color: #1A6B3F; }
+.notice .fine {
+  font-size: 13.5px; font-family: var(--sans); color: var(--paper-dim);
+  margin-top: 18px; padding-top: 15px; border-top: 1px solid #DCD7C8; line-height: 1.6;
+}
+
+/* =========================================================
+   FLIP-BOARD
+   ========================================================= */
+.flip-board {
+  background: #070A08;
+  border: 1px solid rgba(230,237,230,0.10);
+  border-radius: 4px; margin-top: 14px; overflow: hidden;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.6), 0 4px 20px rgba(0,0,0,0.55);
+  position: relative;
+}
+.flip-board::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 3px);
+}
+.flip-board-head {
+  display: grid; grid-template-columns: 120px 1fr auto; gap: 1.2em;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(230,237,230,0.10);
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: #E8B048;
+}
+.flip-board .dep {
+  display: grid; grid-template-columns: 120px 1fr auto; gap: 1.2em;
+  align-items: baseline;
+  border-bottom: 1px dashed rgba(232,176,72,0.10);
+  padding: 12px 18px;
+  font-family: var(--mono); color: #E8B048;
+  text-shadow: 0 0 6px rgba(232,176,72,0.25);
+  transition: background 100ms;
+}
+.flip-board .dep:nth-child(odd) { background: rgba(232,176,72,0.025); }
+.flip-board a.dep:hover { background: rgba(232,176,72,0.06); }
+.flip-board .dep .kind { color: #B58030; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+.flip-board .dep .what {
+  color: #F4D58A; font-family: var(--sans); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.04em; font-size: 13.5px;
+}
+.flip-board .dep .what em {
+  font-family: var(--display); font-style: italic; text-transform: none;
+  font-weight: 400; color: #F4D58A; letter-spacing: 0;
+}
+.flip-board .dep .arrow {
+  font-family: var(--mono); font-size: 10.5px;
+  color: var(--line); text-shadow: 0 0 6px rgba(27,158,87,0.4);
+  letter-spacing: 0.10em; text-transform: uppercase;
+}
+@media (max-width: 640px) {
+  .flip-board-head, .flip-board .dep { grid-template-columns: 90px 1fr; }
+  .flip-board .dep .arrow { display: none; }
+}
+
+/* footer */
+.foot {
+  padding: 28px 0 40px;
+  font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint);
+  margin-top: 4px;
+}
+.foot .right { color: var(--line); }
+@media (max-width: 540px) {
+  .foot .wrap { flex-direction: column; gap: 8px; align-items: flex-start; }
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap;
+}
 </style>
+<link rel="stylesheet" href="septa.css">
+<link rel="stylesheet" href="septa-deep.css">
 </head>
 <body>
 
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">
-  English III line page: a course overview, six stops still being planned, and a plain notice for families about attendance, phones, grades, and academic honesty.
-</h2>
+<h2 class="sr-only">English III line page: a course overview, six stops still being planned, and a plain notice for families about attendance, phones, grades, and academic honesty.</h2>
 
-<header class="top">
-  <div class="wrap top-row">
-    <span class="line-id"><b>EN III</b> · the line</span>
-    <a class="back-link" href="https://shawneehub.netlify.app/">↩ Transfer to the Junction</a>
+<!-- ===== LINE STRIPE ===== -->
+<div class="line-stripe" aria-hidden="true"></div>
+
+<!-- ===== SUBWAY ===== -->
+<div class="sw-wrap" data-subway data-current="terminal">
+  <button type="button" class="sw-trigger" aria-haspopup="true" aria-expanded="false" aria-label="English III line">
+    <span class="sw-roundel" aria-hidden="true"></span>
+    <span>EN III — the line</span>
+    <span class="sw-caret" aria-hidden="true">▾</span>
+  </button>
+  <div class="sw-panel" role="menu">
+    <span class="sw-label">// six stops on the line</span>
+    <span class="sw-item is-stub" data-key="rhetoric"><span class="sw-num">01</span><span class="sw-name">Rhetoric</span></span>
+    <a class="sw-item" href="1984/" data-key="1984" role="menuitem"><span class="sw-num">02</span><span class="sw-name">1984</span></a>
+    <span class="sw-item is-stub" data-key="homefire"><span class="sw-num">03</span><span class="sw-name">Home Fire</span></span>
+    <span class="sw-item is-stub" data-key="beowulf"><span class="sw-num">04</span><span class="sw-name">Beowulf</span></span>
+    <span class="sw-item is-stub" data-key="macbeth"><span class="sw-num">05</span><span class="sw-name">Macbeth</span></span>
+    <span class="sw-item is-stub" data-key="narrative"><span class="sw-num">06</span><span class="sw-name">Personal Narrative</span></span>
+    <div class="sw-divider"></div>
+    <a class="sw-item" href="syllabus/" role="menuitem"><span class="sw-num">§</span><span class="sw-name">Syllabus &amp; expectations</span></a>
+    <div class="sw-divider"></div>
+    <a class="sw-terminal" href="https://shawneehub.netlify.app/" role="menuitem">↩ Transfer to the Junction</a>
+  </div>
+</div>
+
+<!-- ===== TERMINAL ===== -->
+<header class="terminal">
+  <div class="wrap">
+
+    <a class="station-entrance" href="https://shawneehub.netlify.app/" aria-label="Transfer to the Junction">
+      <span class="big-bullet" aria-hidden="true">III</span>
+      <div class="nameplate">
+        <span class="station-no">// Line · English III · Junior</span>
+        <span class="station-name-big">English III — the line</span>
+        <span class="station-sub">A line on the network</span>
+      </div>
+      <span class="arrow-to-trains">
+        <span class="from">From</span>
+        <span>The Junction <span class="arr">↩</span></span>
+      </span>
+    </a>
+
+    <div class="a11y" role="group" aria-label="Accessibility settings">
+      <span class="a11y-label">Reading</span>
+      <button type="button" id="btn-big" aria-pressed="false">Larger text</button>
+      <button type="button" id="btn-hc" aria-pressed="false">High contrast</button>
+      <button type="button" id="btn-rm" aria-pressed="false">Reduce motion</button>
+      <button type="button" id="btn-reset">Reset</button>
+    </div>
+
+    <h1 class="line-name">Six stops, one&nbsp;<em>question</em>.</h1>
+    <p class="lede">Junior English follows one big idea all year: <strong>every story about power is also a story about which words survive.</strong> This line follows that idea from a dragon's price list, to a tyrant's dictionary, to a stolen crown, then turns the same question back on the students in the room. Most days open with a knights-and-knaves puzzle or a thought experiment to sharpen critical thinking, and media criticism runs through the whole year. The last stop is their own writing, judged by the same rules as everyone else's.</p>
+    <p class="signoff">Conductor &nbsp; / &nbsp; <span class="conductor">Mr. Casey</span></p>
+
+    <figure class="hero-figure">
+      <img src="img/conductor-septa.jpg" alt="Illustration: the Conductor, in a blue uniform, cap and green sunglasses, riding a crowded Broad Street Line subway car." loading="lazy" width="922" height="1152">
+      <figcaption>// The line runs whether or not you're reading</figcaption>
+    </figure>
+
+    <div class="advisory" role="status">In construction · stops open as their unit pages ship · check the Junction for the live network</div>
+
+    <p class="plain-link">Just need the practical stuff? → <a href="syllabus/">Syllabus &amp; expectations</a></p>
   </div>
 </header>
 
-<div class="a11y" role="group" aria-label="Accessibility settings">
-  <button type="button" id="btn-big" aria-pressed="false">Larger text</button>
-  <button type="button" id="btn-hc" aria-pressed="false">High contrast</button>
-  <button type="button" id="btn-rm" aria-pressed="false">Reduce motion</button>
-  <button type="button" id="btn-reset">Reset</button>
-</div>
+<div class="wrap"><div class="caution-stripe" aria-hidden="true"></div></div>
 
-<main>
-  <section class="hero wrap">
-    <p class="breadcrumb">III // Line · English III · <a href="https://shawneehub.netlify.app/">From The Junction ↩</a></p>
-    <h1>The line starts here.</h1>
-    <p class="thesis">Junior English follows one big idea all year: every story about power is also a story about which words survive. This line follows that idea from a dragon's price list, to a tyrant's dictionary, to a stolen crown, then turns the same question back on the students in the room. Most days open with a knights-and-knaves puzzle or a thought experiment to sharpen critical thinking, and media criticism runs through the whole year. The last stop is their own writing, judged by the same rules as everyone else's.</p>
+<!-- ===== BOARD ===== -->
+<section class="board">
+  <div class="wrap">
+    <div class="board-header">
+      <span class="board-title">// Departures · the line</span>
+      <span class="board-meta">Stop pages in planning · units run in order</span>
+    </div>
 
-    <p class="conductor-line">Conductor / Mr. Casey</p>
-    <p class="conductor-line" style="margin-top:14px;">Just need the practical stuff? → <a href="/syllabus/">Syllabus &amp; expectations</a></p>
-  </section>
+    <div class="route">
 
-  <section class="departures wrap">
-    <p class="eyebrow">// Departures · the line</p>
-    <ol class="dep-list">
-      <li class="dep">
-        <span class="dep-num mono">01</span>
-        <div class="dep-body">
-          <h3>Rhetoric</h3>
-          <p>Not decoration. The basic structure that holds up every argument.</p>
+      <div class="station">
+        <span class="station-num">01</span>
+        <span class="station-name">
+          Rhetoric
+          <span class="frame">Not decoration. The basic structure that holds up every argument.</span>
+        </span>
+        <span class="station-status">In planning</span>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-rhetoric.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, seated at the table in a 1950s jury room while one juror stands mid-argument." loading="lazy" width="922" height="1152">
+          </figure>
+          <div class="platform-body">
+            <button type="button" class="trailer-toggle" aria-expanded="false" data-video="5xNlNV-UIUs">▶ Trailer</button>
+            <div class="trailer-embed"></div>
+            <p class="trailer-note">Twelve Angry Men, 1957. One juror votes not guilty against eleven others, then has to build a case for it, one person at a time.</p>
+          </div>
         </div>
-        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="5xNlNV-UIUs">▶ Trailer</button>
-        <div class="trailer-embed"></div>
-        <p class="trailer-note">Twelve Angry Men, 1957. One juror votes not guilty against eleven others, then has to build a case for it, one person at a time.</p>
-      </li>
-      <li class="dep">
-        <span class="dep-num mono">02</span>
-        <div class="dep-body">
-          <h3>1984</h3>
-          <p>Not the cameras. The dictionary.</p>
-        </div>
-        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="2zfqw8nhUwA">▶ Trailer</button>
-        <div class="trailer-embed"></div>
-        <p class="trailer-note">Apple's famous 1984 ad: advertising, its own kind of propaganda, borrowing Orwell's ideas to sell a computer.</p>
-      </li>
-      <li class="dep">
-        <span class="dep-num mono">03</span>
-        <div class="dep-body">
-          <h3>Home Fire</h3>
-          <p>Whose grief the world takes seriously, and whose gets called a threat instead.</p>
-        </div>
-        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="3fFG0wYyR0Q">▶ Trailer</button>
-        <div class="trailer-embed"></div>
-        <p class="trailer-note">A 2019 film, also called Antigone, that moves the same myth into modern Montreal: a brother's death, a family standing against the state to bury him properly.</p>
-      </li>
-      <li class="dep">
-        <span class="dep-num mono">04</span>
-        <div class="dep-body">
-          <h3>Beowulf</h3>
-          <p>The dragon's the least interesting part. What happens after the killing (who owes what) is the real point.</p>
-        </div>
-        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="QT5nja2Wy28">▶ Trailer</button>
-        <div class="trailer-embed"></div>
-        <p class="trailer-note">The British Library reading Beowulf's opening lines aloud, in the actual Old English it was written in.</p>
-      </li>
-      <li class="dep">
-        <span class="dep-num mono">05</span>
-        <div class="dep-body">
-          <h3>Macbeth</h3>
-          <p>A stolen crown, and a price that never stops climbing.</p>
-        </div>
-        <button type="button" class="trailer-toggle" aria-expanded="false" data-video="zGbZCgHQ9m8">▶ Trailer</button>
-        <div class="trailer-embed"></div>
-        <p class="trailer-note">Ian McKellen, 1979, breaking down "tomorrow, and tomorrow, and tomorrow" line by line: what the words are actually doing, not just what they mean.</p>
-      </li>
-      <li class="dep">
-        <span class="dep-num mono">06</span>
-        <div class="dep-body">
-          <h3>Personal narrative</h3>
-          <p>Every argument up to this point was about somebody else's words. This one's about yours.</p>
-        </div>
-      </li>
-    </ol>
-  </section>
+      </div>
 
-  <section class="notices wrap">
-    <p class="eyebrow">// Notices</p>
+      <div class="station is-live">
+        <span class="station-num">02</span>
+        <span class="station-name">
+          1984
+          <span class="frame">Not the cameras. The dictionary.</span>
+        </span>
+        <a class="station-status station-go" href="1984/" aria-label="1984: open the reading room">Open · reading room</a>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-1984.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, grinning on the benches of the British House of Commons while a debate goes on around him." loading="lazy" width="1000" height="800">
+          </figure>
+          <div class="platform-body">
+            <button type="button" class="trailer-toggle" aria-expanded="false" data-video="2zfqw8nhUwA">▶ Trailer</button>
+            <div class="trailer-embed"></div>
+            <p class="trailer-note">Apple's famous 1984 ad: advertising, its own kind of propaganda, borrowing Orwell's ideas to sell a computer.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="station">
+        <span class="station-num">03</span>
+        <span class="station-name">
+          Home Fire
+          <span class="frame">Whose grief the world takes seriously, and whose gets called a threat instead.</span>
+        </span>
+        <span class="station-status">In planning</span>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-homefire.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, waiting in a late-night airport passport control queue with his passport in hand." loading="lazy" width="922" height="1152">
+          </figure>
+          <div class="platform-body">
+            <button type="button" class="trailer-toggle" aria-expanded="false" data-video="3fFG0wYyR0Q">▶ Trailer</button>
+            <div class="trailer-embed"></div>
+            <p class="trailer-note">A 2019 film, also called Antigone, that moves the same myth into modern Montreal: a brother's death, a family standing against the state to bury him properly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="station">
+        <span class="station-num">04</span>
+        <span class="station-name">
+          Beowulf
+          <span class="frame">The dragon's the least interesting part. What happens after the killing — who owes what — is the real point.</span>
+        </span>
+        <span class="station-status">In planning</span>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-beowulf.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, standing in a shield wall of Norse warriors beside a longship." loading="lazy" width="1000" height="800">
+          </figure>
+          <div class="platform-body">
+            <button type="button" class="trailer-toggle" aria-expanded="false" data-video="QT5nja2Wy28">▶ Listen</button>
+            <div class="trailer-embed"></div>
+            <p class="trailer-note">The British Library reading Beowulf's opening lines aloud, in the actual Old English it was written in.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="station">
+        <span class="station-num">05</span>
+        <span class="station-name">
+          Macbeth
+          <span class="frame">A stolen crown, and a price that never stops climbing.</span>
+        </span>
+        <span class="station-status">In planning</span>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-macbeth.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, standing among armed retainers behind a bloodied warrior and a woman in a circlet on a battlefield." loading="lazy" width="1000" height="800">
+          </figure>
+          <div class="platform-body">
+            <button type="button" class="trailer-toggle" aria-expanded="false" data-video="zGbZCgHQ9m8">▶ Watch</button>
+            <div class="trailer-embed"></div>
+            <p class="trailer-note">Ian McKellen, 1979, breaking down "tomorrow, and tomorrow, and tomorrow" line by line: what the words are actually doing, not just what they mean.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="station">
+        <span class="station-num">06</span>
+        <span class="station-name">
+          Personal narrative
+          <span class="frame">Every argument up to this point was about somebody else's words. This one's about yours.</span>
+        </span>
+        <span class="station-status">In planning</span>
+        <div class="platform">
+          <figure class="poster">
+            <img src="img/conductor-personal-narrative.jpg" alt="Illustration: the Conductor, in cap and green sunglasses, waiting in a college admissions office among families sitting with their applications." loading="lazy" width="922" height="1152">
+          </figure>
+          <div class="platform-body">
+            <p class="trailer-note">The last stop on the line, and the one where somebody else is finally reading you. Same rules as everyone else's.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="caution-stripe" aria-hidden="true"></div></div>
+
+<!-- ===== NOTICES ===== -->
+<section class="board" style="padding-top:8px;">
+  <div class="wrap">
+    <div class="board-header">
+      <span class="board-title">// Notices</span>
+      <span class="board-meta">Posted for families</span>
+    </div>
+
     <div class="notice">
       <h3>For families, plainly</h3>
       <ul>
@@ -290,79 +891,145 @@
         <li><b>Academic honesty:</b> cheating and plagiarism both start with a zero the first time it happens. That includes using AI tools without permission.</li>
         <li><b>Homework:</b> there isn't much of it, on purpose. Most of it is grammar practice and reading. When there's a reading check, it's just to see if the reading got done, not a hard test.</li>
       </ul>
-      <p class="fine">The full policy is written out in the LRHSD student handbook. Questions → <a href="https://shawneehub.netlify.app/pages/contact">Contact</a>.</p>
+      <p class="fine">The full policy is written out in the student handbook. There's a plainer version of all of this on the <a href="syllabus/">syllabus page</a>. Questions → <a href="https://shawneehub.netlify.app/pages/contact">Contact</a>.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="transfers wrap">
-    <p class="eyebrow">// Transfers</p>
-    <table>
-      <thead><tr><th>Track</th><th>Destination</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td data-label="Track">↩ Terminal</td><td data-label="Destination">The Junction <span class="mono" style="color:var(--parchment-dim);">· main hub</span></td><td data-label="Status" class="status-open mono">→ now</td></tr>
-        <tr><td data-label="Track">Sister line</td><td data-label="Destination">English IV <span class="mono" style="color:var(--parchment-dim);">· senior line</span></td><td data-label="Status" class="status-plan mono">→ in construction</td></tr>
-        <tr><td data-label="Track">Sister line</td><td data-label="Destination">English II <span class="mono" style="color:var(--parchment-dim);">· sophomore line</span></td><td data-label="Status" class="status-open mono">→ open</td></tr>
-        <tr><td data-label="Track">Transfer</td><td data-label="Destination">Shawnee Media Lab <span class="mono" style="color:var(--parchment-dim);">· the propaganda model</span></td><td data-label="Status" class="status-open mono">→ open</td></tr>
-      </tbody>
-    </table>
-  </section>
+<div class="wrap"><div class="caution-stripe" aria-hidden="true"></div></div>
 
-  <footer class="wrap">
-    <div class="foot-row">
-      <span>EN III · Casey</span>
-      <a href="https://shawneehub.netlify.app/pages/contact">Contact</a>
+<!-- ===== TRANSFERS ===== -->
+<section class="board" style="padding-top:8px;">
+  <div class="wrap">
+    <div class="board-header">
+      <span class="board-title">// Transfers</span>
+      <span class="board-meta">Connecting service to the rest of the network</span>
     </div>
-  </footer>
-</main>
+
+    <div class="flip-board" role="list" aria-label="Transfer board">
+      <div class="flip-board-head">
+        <span>Track</span>
+        <span>Destination</span>
+        <span>Status</span>
+      </div>
+      <a class="dep" href="https://shawneehub.netlify.app/" role="listitem">
+        <span class="kind">↩ Terminal</span>
+        <span class="what">The Junction <em>· main hub</em></span>
+        <span class="arrow">→ now</span>
+      </a>
+      <a class="dep" href="https://caseyenglish2.netlify.app/" role="listitem">
+        <span class="kind">Sister line</span>
+        <span class="what">English II <em>· sophomore line</em></span>
+        <span class="arrow">→ open</span>
+      </a>
+      <a class="dep" href="https://caseyenglish4.netlify.app/" role="listitem">
+        <span class="kind">Sister line</span>
+        <span class="what">English IV <em>· senior line</em></span>
+        <span class="arrow">→ in construction</span>
+      </a>
+      <a class="dep" href="https://shawneemedialab.netlify.app/" role="listitem">
+        <span class="kind">Transfer</span>
+        <span class="what">The Fifth Filter <em>· the propaganda model</em></span>
+        <span class="arrow">→ open</span>
+      </a>
+      <a class="dep" href="https://shawnee-grammar-pilot.netlify.app/" role="listitem">
+        <span class="kind">Practice</span>
+        <span class="what">The Grammar Gym <em>&middot; verb, subject, agreement</em></span>
+        <span class="arrow">&rarr; open</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap" style="display:flex; justify-content:space-between; align-items:baseline; width:100%; gap:1rem; flex-wrap:wrap;">
+    <span>EN III &nbsp; · &nbsp; Casey</span>
+    <span><a href="https://shawneehub.netlify.app/pages/contact" style="border-bottom:1px dotted currentColor;">Contact</a></span>
+    <span class="right">↳ Stops open as they're built</span>
+  </div>
+</footer>
 
 <script>
+/* subway dropdown */
+document.querySelectorAll('[data-subway]').forEach(function(wrap){
+  var btn = wrap.querySelector('.sw-trigger');
+  var panel = wrap.querySelector('.sw-panel');
+  if (!btn || !panel) return;
+
+  var current = wrap.getAttribute('data-current');
+  if (current && current !== 'terminal') {
+    var here = panel.querySelector('.sw-item[data-key="' + current + '"]');
+    if (here) { here.classList.remove('is-stub'); here.classList.add('is-here'); }
+  }
+  function open(){ panel.classList.add('is-open'); btn.setAttribute('aria-expanded','true'); }
+  function close(){ panel.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    panel.classList.contains('is-open') ? close() : open();
+  });
+  document.addEventListener('click', function(e){ if (!wrap.contains(e.target)) close(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && panel.classList.contains('is-open')) { close(); btn.focus(); }
+  });
+});
+
+/* accessibility toggles */
 (function(){
   var html = document.documentElement;
   var map = { big:'btn-big', hc:'btn-hc', rm:'btn-rm' };
+  function store(k, v){ try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch(e){} }
+  function read(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
   function apply(){
     Object.keys(map).forEach(function(cls){
-      var on = localStorage.getItem('en3-'+cls) === '1';
+      var on = read('en3-' + cls) === '1';
       html.classList.toggle(cls, on);
-      document.getElementById(map[cls]).setAttribute('aria-pressed', on ? 'true' : 'false');
+      var b = document.getElementById(map[cls]);
+      if (b) b.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   }
   Object.keys(map).forEach(function(cls){
-    document.getElementById(map[cls]).addEventListener('click', function(){
-      var on = localStorage.getItem('en3-'+cls) === '1';
-      localStorage.setItem('en3-'+cls, on ? '0' : '1');
+    var b = document.getElementById(map[cls]);
+    if (!b) return;
+    b.addEventListener('click', function(){
+      var on = read('en3-' + cls) === '1';
+      store('en3-' + cls, on ? '0' : '1');
       apply();
     });
   });
-  document.getElementById('btn-reset').addEventListener('click', function(){
-    Object.keys(map).forEach(function(cls){ localStorage.removeItem('en3-'+cls); });
+  var r = document.getElementById('btn-reset');
+  if (r) r.addEventListener('click', function(){
+    Object.keys(map).forEach(function(cls){ store('en3-' + cls, null); });
     apply();
   });
   apply();
-
-  document.querySelectorAll('.trailer-toggle').forEach(function(btn){
-    var embed = btn.nextElementSibling;
-    btn.addEventListener('click', function(){
-      var open = btn.getAttribute('aria-expanded') === 'true';
-      if (open){
-        embed.classList.remove('open');
-        embed.innerHTML = '';
-        btn.setAttribute('aria-expanded','false');
-        btn.textContent = '▶ Trailer';
-      } else {
-        var id = btn.getAttribute('data-video');
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id;
-        iframe.title = btn.closest('.dep').querySelector('h3').textContent + ' trailer';
-        iframe.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture';
-        iframe.loading = 'lazy';
-        embed.appendChild(iframe);
-        embed.classList.add('open');
-        btn.setAttribute('aria-expanded','true');
-        btn.textContent = '▲ Close';
-      }
-    });
-  });
 })();
+
+/* trailer embeds — created on demand, torn down on close */
+document.querySelectorAll('.trailer-toggle').forEach(function(btn){
+  var embed = btn.nextElementSibling;
+  var label = btn.textContent.trim();
+  btn.addEventListener('click', function(){
+    var open = btn.getAttribute('aria-expanded') === 'true';
+    if (open) {
+      embed.classList.remove('open');
+      embed.innerHTML = '';
+      btn.setAttribute('aria-expanded','false');
+      btn.textContent = label;
+    } else {
+      var id = btn.getAttribute('data-video');
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id;
+      iframe.title = btn.closest('.station').querySelector('.station-name').firstChild.textContent.trim() + ' video';
+      iframe.allow = 'accelerometer; encrypted-media; gyroscope; picture-in-picture';
+      iframe.loading = 'lazy';
+      embed.appendChild(iframe);
+      embed.classList.add('open');
+      btn.setAttribute('aria-expanded','true');
+      btn.textContent = '▲ Close';
+    }
+  });
+});
 </script>
+
 </body>
 </html>
