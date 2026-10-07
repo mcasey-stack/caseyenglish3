@@ -74,6 +74,22 @@
     box-shadow: inset 0 0 0 1px #6b5530, 0 0 0 3px #1a1311, 0 0 0 4px #8c6f3b, 0 6px 18px rgba(0,0,0,.35);
   }
   .plate img { display: block; max-width: 100%; max-height: 50vh; }
+  .plate .zoom { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  /* full-size picture pop-up */
+  .lightbox { padding: 0; border: 0; background: none; max-width: none; max-height: none; overflow: visible; cursor: zoom-out; }
+  .lightbox::backdrop { background: rgba(10, 7, 6, .92); }
+  .lightbox img {
+    display: block; max-width: calc(100vw - 32px); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+    padding: 8px; background: #1a1311;
+    box-shadow: inset 0 0 0 1px #6b5530, 0 0 0 3px #1a1311, 0 0 0 4px #8c6f3b, 0 6px 18px rgba(0,0,0,.35);
+  }
+  .lightbox .close {
+    position: fixed; top: 12px; right: 16px; z-index: 1;
+    font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--text); background: var(--dark); border: 1px solid var(--rule); padding: 5px 10px; cursor: pointer;
+  }
+  .lightbox .close:hover { border-color: var(--red-lit); }
+  body:has(.lightbox[open]) { overflow: hidden; }
   /* the text of the play */
   .speech { margin: 0 0 12px; max-width: 34em; }
   .spk { display: block; font: 600 12px var(--head); letter-spacing: .16em; text-transform: uppercase; color: var(--red); margin: 0 0 1px; }
@@ -165,6 +181,10 @@
   <div class="strip" id="strip"></div>
   <button class="step next" id="next">Next &rarr;</button>
 </nav>
+<dialog class="lightbox" id="lightbox" aria-label="Picture, full size">
+  <button type="button" class="close">&times; Close</button>
+  <img id="lightbox-img" alt="">
+</dialog>
 
 <script>
 const Q = [
@@ -1254,7 +1274,7 @@ function note(h, body, cls = "") { return `<div class="note ${cls}"><h2>${h}</h2
 function renderQuote(d, i) {
   $("loc").textContent = d.loc;
   $("who").textContent = d.who || "";
-  let qh = d.img ? `<figure class="plate"><img src="${d.img.src}" alt="${esc(d.img.alt)}"></figure>` : "";
+  let qh = d.img ? `<figure class="plate"><button type="button" class="zoom" title="Click to see the full picture"><img src="${d.img.src}" alt="${esc(d.img.alt)}"></button></figure>` : "";
   $("left").innerHTML = qh + d.text;
   let h = note("In plain English", d.plain, "plain");
   h += note("Context", d.ctx);
@@ -1322,11 +1342,23 @@ document.addEventListener("click", e => {
   else if (t.dataset.view) { view = t.dataset.view; render(); }
 });
 document.addEventListener("keydown", e => {
+  if ($("lightbox").open) return;
   if (e.key === "ArrowRight") { idx[view]++; render(); }
   if (e.key === "ArrowLeft") { idx[view]--; render(); }
 });
 $("prev").onclick = () => { idx[view]--; render(); };
 $("next").onclick = () => { idx[view]++; render(); };
+
+/* ---------- full-size picture ---------- */
+$("left").addEventListener("click", e => {
+  const z = e.target.closest(".zoom");
+  if (!z) return;
+  const img = z.querySelector("img"), big = $("lightbox-img");
+  big.src = img.src; big.alt = img.alt;
+  $("lightbox").showModal();
+});
+$("lightbox").addEventListener("click", () => $("lightbox").close());
+$("lightbox").addEventListener("close", () => { const z = $("left").querySelector(".zoom"); if (z) z.focus(); });
 
 (function start() {
   const h = location.hash;
