@@ -81,6 +81,22 @@
     background: repeating-linear-gradient(to bottom, rgba(0,0,0,.10) 0 1px, transparent 1px 3px);
     box-shadow: inset 0 0 40px rgba(0,0,0,.45);
   }
+  .screen .zoom { display: block; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  /* full-size picture pop-up */
+  .lightbox { padding: 0; border: 0; background: none; max-width: none; max-height: none; overflow: visible; cursor: zoom-out; }
+  .lightbox::backdrop { background: rgba(10, 10, 8, .92); }
+  .lightbox img {
+    display: block; max-width: calc(100vw - 32px); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+    padding: 8px; background: #181915; border-radius: 10px;
+    box-shadow: inset 0 0 0 2px #33352e, 0 6px 18px rgba(0,0,0,.35);
+  }
+  .lightbox .close {
+    position: fixed; top: 12px; right: 16px; z-index: 1;
+    font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--text); background: var(--dark); border: 1px solid var(--rule); padding: 5px 10px; cursor: pointer;
+  }
+  .lightbox .close:hover { border-color: var(--red-lit); }
+  body:has(.lightbox[open]) { overflow: hidden; }
   /* plot */
   .chap { display: grid; grid-template-columns: 52px 1fr; gap: 0 12px; padding: 12px 0; border-top: 1px solid var(--paper-rule); }
   .chap:first-of-type { border-top: 0; padding-top: 0; }
@@ -198,6 +214,11 @@
   <div class="strip" id="strip"></div>
   <button class="step next" id="next">Next &rarr;</button>
 </nav>
+
+<dialog class="lightbox" id="lightbox" aria-label="Picture, full size">
+  <button type="button" class="close">&times; Close</button>
+  <img id="lightbox-img" alt="">
+</dialog>
 
 <script>
 const P1 = "Part One", P2 = "Part Two", P3 = "Part Three";
@@ -675,7 +696,7 @@ function further(list) {
 function renderQuote(d, i) {
   $("loc").textContent = d.loc;
   $("who").textContent = d.who || "";
-  let qh = d.img ? `<figure class="screen"><img src="${d.img.src}" alt="${esc(d.img.alt)}"></figure>` : "";
+  let qh = d.img ? `<figure class="screen"><button type="button" class="zoom" title="Click to see the full picture"><img src="${d.img.src}" alt="${esc(d.img.alt)}"></button></figure>` : "";
   qh += d.q.map(p => p.startsWith("<blockquote") ? p : `<p>${p}</p>`).join("");
   $("left").innerHTML = qh;
   let h = note("Context", d.ctx);
@@ -832,6 +853,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("input", e => { const k = e.target.dataset && e.target.dataset.save; if (k) store.set(k, e.target.value); });
 document.addEventListener("keydown", e => {
+  if ($("lightbox").open) return;
   if (e.target.matches("textarea, input")) {
     if (e.key === "Enter" && e.target.matches("input[data-save^='newspeak:']")) checkNewspeak(+e.target.dataset.save.split(":")[1]);
     return;
@@ -842,6 +864,17 @@ document.addEventListener("keydown", e => {
 });
 $("prev").onclick = () => { idx[view]--; render(); };
 $("next").onclick = () => { idx[view]++; render(); };
+
+/* ---------- full-size picture ---------- */
+$("left").addEventListener("click", e => {
+  const z = e.target.closest(".zoom");
+  if (!z) return;
+  const img = z.querySelector("img"), big = $("lightbox-img");
+  big.src = img.src; big.alt = img.alt;
+  $("lightbox").showModal();
+});
+$("lightbox").addEventListener("click", () => $("lightbox").close());
+$("lightbox").addEventListener("close", () => { const z = $("left").querySelector(".zoom"); if (z) z.focus(); });
 
 (function start() {
   const h = location.hash;
