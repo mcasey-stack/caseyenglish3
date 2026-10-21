@@ -497,8 +497,17 @@ if (typeof module !== "undefined") module.exports = Engine;
   })();
   function current() { return DATA.prompts[setIds[state.round]]; }
 
+  // Count this climb once on the server, for the play tally on the high-score board.
+  function countPlay() {
+    if (state.played) return;
+    var run = state.run;
+    fetch(API + "/api/play", { method: "POST", headers: { "content-type": "text/plain" }, keepalive: true, body: JSON.stringify({ day: state.day, run: run }) })
+      .then(function (r) { if (r.ok && state.run === run) { state.played = true; save(); } }, function () {});
+  }
+
   function startRound() {
     var p = current();
+    countPlay();
     state.phase = "play";
     if (!state.deadline) state.deadline = Date.now() + ROUND_MS;
     save();
