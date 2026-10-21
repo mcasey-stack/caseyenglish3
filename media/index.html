@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media: Reading Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Libre+Baskerville:ital@0;1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #121310;
+    --dark: #1e201b;
+    --panel: #262822;
+    --rule: #43463d;
+    --paper: #d3cdbb;
+    --paper-lite: #e4dfd0;
+    --paper-ink: #22211d;
+    --paper-dim: #5c584c;
+    --paper-rule: #aaa38f;
+    --text: #d8d3c3;
+    --bright: #ece7d6;
+    --muted: #8f8c80;
+    --red: #a3271f;
+    --red-lit: #e2604f;
+    --steel: #8aa0ad;
+    --ok: #3d6b45;
+    --ok-lit: #8fb897;
+    --head: "Oswald", "Arial Narrow", Impact, sans-serif;
+    --serif: "Libre Baskerville", Georgia, serif;
+    --sans: "Source Sans 3", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--black); color: var(--text); font-family: var(--sans);
+    display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 10; opacity: .09;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  header {
+    display: flex; align-items: center; gap: 10px 22px; flex-wrap: wrap;
+    padding: 10px 22px; background: var(--black); border-bottom: 3px solid var(--red);
+  }
+  header h1 { margin: 0; display: flex; align-items: baseline; gap: 12px; font-weight: 400; }
+  header h1 .yr { font: 600 30px/1 var(--head); color: var(--red-lit); letter-spacing: .04em; }
+  header h1 .sub { font: 400 14px var(--head); letter-spacing: .28em; text-transform: uppercase; color: var(--text); }
+  .tabs { display: flex; gap: 4px; }
+  .tabs button {
+    font: 400 13px var(--head); letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); background: none; border: 1px solid transparent; padding: 6px 12px; cursor: pointer;
+  }
+  .tabs button:hover { color: var(--text); }
+  .tabs button[aria-selected="true"] { color: var(--text); border-color: var(--rule); background: var(--dark); box-shadow: inset 0 -2px 0 var(--red-lit); }
+  header .loc { font: 400 14px var(--head); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  header .who { font: 400 14px var(--head); letter-spacing: .12em; text-transform: uppercase; color: var(--steel); }
+  header .count { margin-left: auto; font: 400 14px var(--head); letter-spacing: .12em; color: var(--muted); }
+  header .back { font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; border: 1px solid var(--rule); padding: 5px 10px; }
+  header .back:hover { color: var(--text); border-color: var(--red-lit); }
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.1fr 1fr; }
+  .col { overflow-y: auto; padding: 26px 30px; }
+  .left {
+    background: var(--paper); color: var(--paper-ink);
+    background-image: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.18), transparent 60%),
+                      radial-gradient(ellipse at 80% 90%, rgba(90,70,40,.18), transparent 55%);
+    font-family: var(--serif); font-size: 17.5px; line-height: 1.75;
+  }
+  .left p { margin: 0 0 14px; }
+  .left h2 { font: 600 22px var(--head); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 16px; color: var(--paper-ink); }
+  .left .kicker { font: 400 12px var(--head); letter-spacing: .2em; text-transform: uppercase; color: var(--paper-dim); margin: 0 0 4px; }
+  .left .kicker b { color: var(--ok); font-weight: 600; }
+  /* the article paragraph */
+  .para { font-size: 19px; line-height: 1.8; }
+  .para.hed { font: 400 italic 27px/1.35 var(--serif); }
+  .para.dek { font-size: 19px; color: #3a382f; }
+  mark {
+    color: inherit; padding: 0 .1em;
+    background: rgba(163, 39, 31, .13); border-bottom: 2px solid var(--red);
+    -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  }
+  .clip { margin: 0 0 14px; padding: 12px 16px; background: var(--paper-lite); border: 1px solid var(--paper-rule); font-size: 18px; line-height: 1.9; }
+  .clip .sep { color: var(--paper-dim); margin: 0 .45em; }
+  .hint { font: 15px/1.55 var(--sans); color: var(--paper-dim); margin: 0 0 14px; }
+  .card.think { margin-top: 6px; }
+  .card.think p:last-child { font: 16.5px/1.55 var(--sans); margin: 0; }
+  .hint .ref { color: var(--red); }
+  /* brief */
+  .art { border-top: 3px double var(--paper-ink); border-bottom: 1px solid var(--paper-ink); padding: 10px 0 12px; margin-bottom: 14px; }
+  .art .t { font: 400 italic 23px/1.35 var(--serif); margin: 0 0 8px; }
+  .art .by { font: 15px/1.5 var(--sans); color: var(--paper-dim); margin: 0 0 8px; }
+  .art a { font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--paper-ink); }
+  .card { background: var(--paper-lite); border: 1px solid var(--paper-rule); padding: 12px 16px; margin-bottom: 14px; }
+  .card h3 { font: 600 18px var(--head); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 4px; }
+  .card .plain { font-family: var(--sans); font-size: 15.5px; line-height: 1.55; color: var(--paper-dim); margin: 0 0 10px; }
+  textarea {
+    width: 100%; font: 15px/1.5 var(--sans); color: var(--paper-ink); background: #f3efe4;
+    border: 1px solid var(--paper-rule); padding: 8px 10px; border-radius: 0; min-height: 72px; height: 72px; resize: vertical;
+  }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .btn {
+    font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--paper-ink); background: transparent; border: 1px solid var(--paper-ink); padding: 6px 12px; cursor: pointer;
+  }
+  .btn:hover { background: var(--paper-ink); color: var(--paper-lite); }
+  .status { font: 15px var(--sans); color: var(--paper-dim); }
+  .status.ok { color: var(--ok); font-weight: 600; }
+  .linkout { width: 100%; font: 13px/1.4 var(--sans); color: var(--paper-dim); background: #f3efe4; border: 1px solid var(--paper-rule); padding: 6px 8px; margin-top: 8px; }
+  .steps { margin: 0; padding-left: 22px; font: 16.5px/1.6 var(--sans); }
+  .steps li { margin-bottom: 6px; }
+  .ppl dt { font: 600 15px var(--head); letter-spacing: .08em; text-transform: uppercase; margin-top: 12px; }
+  .ppl dd { margin: 0; font-size: 16px; line-height: 1.6; }
+  /* notes */
+  .notes { background: var(--panel); font-size: 17px; line-height: 1.6; }
+  .note { margin-bottom: 20px; }
+  .note h2 { font: 400 13px var(--head); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin: 0 0 5px; }
+  .note p { margin: 0 0 8px; }
+  .note em, .note b { color: var(--bright); }
+  .note.crit { border-left: 3px solid var(--red-lit); padding-left: 14px; }
+  .note.crit h2 { color: var(--red-lit); }
+  .note.crit.fair { border-left-color: var(--ok-lit); }
+  .note.crit.fair h2 { color: var(--ok-lit); }
+  .note.check { border-left: 3px solid var(--rule); padding-left: 14px; font-size: 15.5px; }
+  .note.push { border-left: 3px solid var(--steel); padding-left: 14px; }
+  .note.push h2 { color: var(--steel); }
+  .note dl { margin: 0; }
+  .note dt { font-weight: 600; color: var(--bright); margin-top: 8px; }
+  .note dd { margin: 0; }
+  .fr { font-style: italic; }
+  a.src {
+    font: 400 12px var(--head); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+    color: var(--red-lit); text-decoration: none; border-bottom: 1px solid currentColor;
+  }
+  a.src + a.src { margin-left: 6px; }
+  a.src:hover { color: var(--bright); }
+  .ref {
+    color: var(--red-lit); background: none; border: 0; padding: 0; font: inherit;
+    cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+  }
+  nav {
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+    background: var(--black); border-top: 1px solid var(--rule);
+  }
+  nav .step {
+    font: 400 14px var(--head); letter-spacing: .15em; text-transform: uppercase;
+    padding: 8px 14px; color: var(--text); background: var(--dark); border: 1px solid var(--rule); cursor: pointer;
+  }
+  nav .step:hover:not(:disabled) { border-color: var(--red-lit); }
+  nav .step:disabled { opacity: .3; cursor: default; }
+  .strip { flex: 1; display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; }
+  .strip .grp { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .strip .part { font: 400 11px var(--head); letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+  .strip button {
+    min-width: 28px; height: 26px; font: 400 12px var(--head); color: var(--text);
+    border: 1px solid var(--rule); background: var(--dark); cursor: pointer; padding: 0 6px;
+  }
+  .strip button.wide { padding: 0 12px; letter-spacing: .14em; text-transform: uppercase; }
+  .strip button:hover { border-color: var(--red-lit); }
+  .strip button[aria-current="true"] { background: var(--red); border-color: var(--red); color: #fff; }
+  .strip button.fair { box-shadow: inset 0 -2px 0 var(--ok-lit); }
+  button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid var(--red-lit); outline-offset: 2px; }
+  .left button:focus-visible, .left a:focus-visible, .left textarea:focus-visible { outline-color: var(--paper-ink); }
+  @media (max-width: 800px) {
+    body { height: auto; overflow: auto; }
+    header { padding: 10px 16px; gap: 6px 14px; }
+    .tabs { order: 5; flex-basis: 100%; }
+    main { grid-template-columns: 1fr; }
+    .col { overflow: visible; padding: 20px 16px; }
+    .left { font-size: 16.5px; }
+    .para { font-size: 18px; }
+    .para.hed { font-size: 24px; }
+    nav { flex-wrap: wrap; }
+    .strip { order: 3; flex-basis: 100%; }
+    nav .next { margin-left: auto; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="yr">MEDIA</span><span class="sub">Reading Room</span></h1>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-view="brief">Brief</button>
+    <button role="tab" data-view="text">Article</button>
+  </div>
+  <span class="loc" id="loc"></span>
+  <span class="who" id="who"></span>
+  <span class="count" id="count"></span>
+  <a class="back" href="../">&#8617; English III</a>
+</header>
+<main>
+  <section class="col left" id="left" aria-live="polite"></section>
+  <section class="col notes" id="notes"></section>
+</main>
+<nav>
+  <button class="step prev" id="prev">&larr; Prev</button>
+  <div class="strip" id="strip"></div>
+  <button class="step next" id="next">Next &rarr;</button>
+</nav>
+
+<script>
+/* ---------- sources ---------- */
+const SRC = {
+  NYT:     [`The New York Times`, `https://www.nytimes.com/article/france-student-protests-why.html`],
+  AP:      [`AP`, `https://www.bostonglobe.com/2026/10/19/world/france-riots-government-response/`],
+  PSPOL:   [`Public Sénat (French)`, `https://www.publicsenat.fr/actualites/politique/defaut-de-renseignement-sous-estimation-de-la-colere-sociale-strategie-de-pourrissement-le-gouvernem`],
+  ABC:     [`ABC News`, `https://abcnews.com/International/france-protests-cool-after-overnight-curfews-paris-major/story?id=137403836`],
+  AJ18:    [`Al Jazeera`, `https://www.aljazeera.com/news/2026/10/18/paris-left-reeling-as-student-led-protests-turn-chaotic`],
+  AJ18W:   [`Al Jazeera`, `https://www.aljazeera.com/news/2026/10/18/why-have-frances-school-protests-become-a-wider-political-crisis`],
+  AJ19:    [`Al Jazeera`, `https://www.aljazeera.com/news/2026/10/19/frances-macron-declines-ministers-resignation-after-violent-protests`],
+  BERN:    [`Bernama`, `https://bernama.com/en/news.php?id=2622161`],
+  GULF:    [`AFP via Gulf News`, `https://gulfnews.com/world/europe/nearly-2400-arrested-1000-police-wounded-in-france-unrest-ministry-1.500715299`],
+  AJ2:     [`Al Jazeera`, `https://aljazeera.com/news/2026/10/2/protests-shutter-hundreds-of-french-schools-as-violence-flares`],
+  PBS:     [`PBS NewsHour`, `https://www.pbs.org/newshour/world/french-prime-minister-lecornu-calls-for-localized-curfews-in-cities-to-curb-rioting-and-looting`],
+  BUD:     [`Euronews`, `https://www.hellenicshippingnews.com/french-government-to-lay-out-budget-amid-record-breaking-public-debt/`],
+  PENS:    [`Connexion`, `https://www.connexionfrance.com/money/frances-2027-budget-targets-pensions-are-foreign-retirees-affected/818598`],
+  FUEL:    [`Informat`, `https://informat.ro/en/eu/the-war-in-iran-has-cost-eu-consumers-more-than-eur100-billion-141087`],
+  F24FR:   [`France 24 (French)`, `https://www.france24.com/fr/france/20261020-assimiler-lfi-a-ultragauche-une-strategie-en-passe-de-se-retourner-contre-executif-sebastien-lecornu`],
+  AFP:     [`AFP (French)`, `https://www.boursorama.com/actualite-economique/actualites-amp/violences-lecornu-annonce-des-couvre-feux-localises-et-des-aides-pour-les-commerces-touches-3a698f63f7c65c74b60a0498e188fa98`],
+  GOV:     [`Government transcript (French)`, `https://www.info.gouv.fr/actualite/prise-de-parole-du-premier-ministre`],
+  ECOM:    [`Économie Matin (French)`, `https://www.economiematin.fr/?p=234392`],
+  LEX:     [`L’Express (French)`, `https://actu.orange.fr/politique/violences-du-17-octobre-le-gouvernement-accuse-l-ultragauche-la-procureure-de-paris-emet-des-reserves-l-express-via-6medias-CNT000002taJCL.html`],
+  JUST:    [`Justice Ministry (French)`, `https://www.justice.gouv.fr/sites/default/files/2026-10/CP%20-%20Mouvement%20lyc%C3%A9en%20-%2009102026.pdf`],
+  FCD:     [`L’Express Franchise (French)`, `https://lexpress-franchise.com/actualites/pillages-du-17-octobre-1-500-commerces-touches-plusieurs-centaines-de-millions-deuros-de-degats/`],
+  MARS:    [`AFP (French)`, `https://www.sudradio.fr/societe/a-marseille-des-manifestants-ont-penetre-brievement-dans-le-hall-de-la-mairie`],
+  PSELEC:  [`Public Sénat (French)`, `https://www.publicsenat.fr/actualites/politique/la-prochaine-election-presidentielle-aura-lieu-les-18-avril-et-2-mai-2027`]
+};
+const src = k => `<a class="src" href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]}</a>`;
+
+/* ---------- sections of the article ---------- */
+const SEC = {
+  top: [`Top`, `Top of the article`],
+  wk:  [`Weekend`, `What happened this weekend?`],
+  st:  [`Students`, `Why are students protesting?`],
+  oth: [`Others`, `Why did other groups join the students?`],
+  pol: [`Fallout`, `What is the political fallout?`],
+  nxt: [`Next`, `What happens next?`]
+};
+
+/* ---------- the notes ----------
+   start / end: a few words that find the paragraph in a pasted copy.
+   marks: the phrases the note is about.
+   see: other paragraphs, by position in this list. */
+const P = [
+{ sec: `top`, kind: `hed`, start: `Huge Riots and Antigovernment`, end: `What to Know`,
+  marks: [`Huge Riots`, `What to Know`],
+  note: `<p>Riots come first, and they get the adjective: <em>huge</em>. The protests come second, named for what they’re against, the government, not what they’re for: better schools, cheaper fuel, a lower cost of living.</p><p>“What to Know” is the explainer’s promise: we’ll tell you what matters. Keep track of what it decides matters.</p>`,
+  push: `Riots were the news that weekend: thousands of shops hit, a town hall burned. A headline about school funding would hide the event most readers came looking for.`,
+  think: `Write a headline for the same article that leads with what the students want. What does a reader feel first, reading yours?` },
+
+{ sec: `top`, kind: `dek`, start: `France will extend scattered curfews`, end: `school conditions.`,
+  marks: [`devolved into riots`],
+  note: `<p>First sentence, first trick. The demonstrations “devolved into riots.” Nobody devolved them. A riot just happens, like weather.</p><p>Now look at who acts on purpose: France, meaning the government, extends curfews “in response.” The state responds. The crowd decays.</p>`,
+  push: `“Devolved” is everyday newsroom shorthand, and a subhead has room for about 25 words. Naming who started the violence means knowing, and on Tuesday nobody did.`,
+  think: `Find every doer in this sentence. Who acts on purpose, and who just changes?`,
+  see: [2, 21] },
+
+{ sec: `top`, start: `France is moving to reassert`, end: `national reckoning.`,
+  marks: [`reassert order`, `the most destructive riots in decades`, `a sense of national reckoning`],
+  note: `<p>“Reassert order” sounds like fixing a leak. Order is the normal state; disorder is the problem. But order here means curfews and more police. The first sentence takes the government’s goal and makes it the story’s goal.</p><p>Then “most destructive in decades.” Says who? Measured how? And “a sense of national reckoning” is a feeling with no one feeling it.</p>`,
+  check: `AP’s headline called it France’s worst rioting “in years.” A police researcher told AP the damage was probably close to the first two weekends of yellow-vest riots in December 2018. ${src('AP')}`,
+  push: `Every government restores order after riots, left or right, and reporting that is not cheering it. “In decades” could be true by some measure, such as shops hit in one day. The article never says which.`,
+  think: `Order for whom? List who is safer under a curfew, and who has less freedom.`,
+  see: [30] },
+
+{ sec: `top`, start: `Prime Minister Sébastien Lecornu said`, end: `on Monday.`,
+  marks: [`helped keep the night calm`],
+  note: `<p>The first quote in the story goes to the man in charge, grading his own policy. “Helped keep the night calm” goes in unchecked.</p><p>Calm compared to what? The big march was Saturday. Was Monday quiet because of the curfews, or because the crowds had gone home? The article doesn’t ask.</p>`,
+  push: `Reporting what a prime minister announces is the job. The paper doesn’t say the curfews worked. It says he said so, which is true.`,
+  think: `What would you need to know to tell whether the curfews worked?` },
+
+{ sec: `top`, start: `The move came amid`, end: `for the chaos.`,
+  marks: [`a political blame game`],
+  note: `<p>A “blame game” is something kids play. One side runs the police and the spy agencies. The other is an opposition party. Calling it a game makes them equals and turns a real question, who caused this, into bickering.</p><p>And the paper stays out of it. It will report the blaming. It won’t help you keep score.</p>`,
+  push: `When the evidence isn’t in, reporting the fight without naming a winner is the honest choice. A paper that scored the blame on Tuesday would be guessing.`,
+  think: `What would a reporter have to find before saying who is to blame?`,
+  see: [24, 27] },
+
+{ sec: `top`, start: `The protests have heightened`, end: `in the spring.`,
+  marks: [`heightened a sense of fiscal and social crisis`, `the European Union’s second-largest economy`, `an unpopular belt-tightening budget`],
+  note: `<p>Read the order of events. The protests “heightened” a crisis. The budget sits in the background, like the weather.</p><p>“Belt-tightening” is a kitchen-table picture: times are hard, so we all eat a little less. Whose belt? And “the European Union’s second-largest economy” tells you who the paper pictures reading this: someone who thinks about markets.</p>`,
+  check: `The budget freezes pay for public workers and freezes or limits raises for all but the smallest state pensions, as part of €54 billion in savings. In France, public school teachers are public workers. ${src('BUD')} ${src('PENS')}`,
+  push: `France has run large budget deficits for years. “Belt-tightening” is common wording for budgets like this in English-language news. And the article calls the budget “unpopular,” which is no favor to the government.`,
+  think: `Rewrite “an unpopular belt-tightening budget” so the sentence says who pays.`,
+  see: [16] },
+
+{ sec: `wk`, start: `The violence was a convergence`, end: `for looting.`,
+  marks: [`The violence was a convergence`, `opportunistic rioters`, `a cover for looting`],
+  note: `<p>Two moves in one sentence. First, the violence was “a convergence of” the students, the cost-of-living marchers, and looters: three parts of one violence.</p><p>Second, “opportunistic rioters” used the marches as “a cover for looting.” That is a claim about why people acted, in the paper’s own voice, with no source. It matches half of the prime minister’s theory: he blamed the ultra-left for the disorder and, in the evening, <span class="fr">délinquance générale</span>, plain lawbreaking. ${src('PSPOL')}</p>`,
+  check: `Officials told AP thousands of businesses were damaged or looted. ${src('AP')} But targets also included Limoges’s town hall, set on fire, and a tourism office in Lyon, left burned. Not much to steal there. ${src('ABC')} ${src('AJ19')}`,
+  push: `Looting was real, and “opportunistic” fits someone who smashes a phone store window and leaves with phones. Naming three groups beats “protesters rioted.”`,
+  think: `What evidence would show why someone broke a window? Think about which places got hit, what got taken, and what people said in court.`,
+  see: [10, 21] },
+
+{ sec: `wk`, fair: true, start: `More than half a million`, end: `had turned out.`,
+  marks: [`the Interior Ministry said`, `the C.G.T., gave a higher estimate`],
+  note: `<p>Give the Times this one. Two counts, each with its owner. The police count low, the union counts high, and you get both. A crowd size is a claim, and here both claimants are named.</p><p>This is how every number in the article should work. Watch how many of the rest get the same treatment.</p>`,
+  check: `Other outlets report the same official count: 550,000 nationwide, 110,000 of them in Paris. ${src('BERN')}`,
+  push: `Push back on the praise. The government’s number still comes first and sets the frame; the union’s arrives as “a higher estimate.” Is that bias, or just putting the official figure first?`,
+  think: `Why would a government and a union disagree about the size of a crowd?` },
+
+{ sec: `wk`, start: `Amid many peaceful demonstrations`, end: `next couple of days.`,
+  marks: [`Amid many peaceful demonstrations`, `symbols of the French state`, `leading to nearly 2,400 arrests`],
+  note: `<p>“Peaceful” gets four words up front. The damage gets the verbs.</p><p>And watch “leading to nearly 2,400 arrests.” Vandalism leads to arrests, the way a purchase leads to a receipt. Were the 2,400 people arrested the vandals? The article can’t say, so it lets the grammar say it. An arrest is not a conviction.</p>`,
+  check: `AP counts about 2,400 arrests, including 855 in the Paris area. In the Paris region, 557 people were placed in police custody, and 78 percent were adults. The school movement before that weekend looked different; see ¶ 12. ${src('AP')}`,
+  push: `The paper does say most marches were peaceful, which plenty of coverage skips. And “leading to” states an order of events, not a verdict.`,
+  think: `Who were the 2,400? What would you want to know about them before deciding who rioted?`,
+  see: [13] },
+
+{ sec: `wk`, start: `An arson attack largely`, end: `of the republic.`,
+  marks: [`largely destroyed the town hall`, `masked people broke into a government building`, `a bust of Marianne`],
+  note: `<p>Buildings get the vivid details: a town hall gutted by fire, masked intruders, a statue of the Republic knocked over. Hold this paragraph next to ¶14, where a boy loses a hand to a grenade no one is said to have thrown.</p><p>And check the Marseille sentence. “Masked people broke into” may be two events joined into one.</p>`,
+  check: `AFP: a few dozen protesters, mostly young, got briefly into the lobby of Marseille’s city hall, and the bust of Marianne went over. Masked protesters showed up a little earlier, attacking the front of a city police station. ${src('MARS')}`,
+  push: `Burning a town hall is serious, and readers should hear about it. Two sentences on property, in a piece this long, is not much.`,
+  think: `Why might a toppled bust of Marianne make better news than a smashed shop window?`,
+  see: [15] },
+
+{ sec: `wk`, start: `The government has estimated`, end: `over the weekend.`,
+  marks: [`at least 3,000 businesses`, `pillaged`],
+  note: `<p>Two paragraphs ago: about 1,500 shops “vandalized.” Now: at least 3,000 businesses “pillaged,” which means looted. Same weekend.</p><p>The minister who gave the 3,000 figure said those shops had suffered damage or looting. The Times kept the scarier half. “Pillaged” settles the motive, theft, in the paper’s voice.</p>`,
+  check: `Commerce minister Serge Papin, Oct. 19: <span class="fr">“sans doute 3 000 au moins,”</span> shops hit by <span class="fr">dégradations ou pillages</span>, damage or looting. ${src('GOV')} A retail trade group, the FCD, counted about 1,500 on Sunday. ${src('FCD')} One French site called them <span class="fr">visés</span>, targeted, then headlined them <span class="fr">pillés</span>, looted. ${src('ECOM')}`,
+  push: `The count grew as reports came in, so printing both is fair. Many shops were looted, and “damage or looting” is clumsy. But nobody said how many were which.`,
+  think: `Are 1,500 vandalized shops and 3,000 pillaged businesses two facts, or one fact counted twice?`,
+  see: [6, 8] },
+
+{ sec: `st`, start: `High school students started`, end: `of their schools.`,
+  marks: [`to express frustration`],
+  note: `<p>The students don’t demand anything here. They “express frustration.” That is feelings language, the words you use for a child who needs calming down, not for a movement that wants something from the government.</p>`,
+  push: `“Express frustration” is standard, flat newspaper wording. And the very next paragraph lists the students’ demands in detail.`,
+  think: `Swap “express frustration” for a verb that makes the students want something. How does the sentence change?` },
+
+{ sec: `st`, start: `They have pointed to crumbling`, end: `unfairly selective.`,
+  marks: [`They have pointed to`, `that they said were unfairly selective`],
+  note: `<p>Here are the students’ complaints, and they’re concrete. But they arrive secondhand: “they have pointed to,” “they said.”</p><p>Count the quotes in the whole article. Seven, from four men: Lecornu (three), Mélenchon (two), Darmanin (one), Nuñez (one). Three run the government. One wants to. Students quoted: zero. The movement that started all of this never speaks for itself.</p>`,
+  check: `Count it yourself. Find every pair of quotation marks in the article and write down who is speaking. (“Yellow vest” is a name, not a quote.)`,
+  push: `An explainer summarizes. Reporters often quote protesters in separate stories, and one article can’t prove a habit. To make that charge stick, you’d have to check the paper’s other coverage.`,
+  think: `Why might a newspaper quote officials more than protesters? List reasons that aren’t bias. Then list reasons that are.`,
+  see: [29] },
+
+{ sec: `st`, start: `Students have blockaded hundreds`, end: `have been hurt.`,
+  marks: [`They have set fire to, or damaged`, `Thousands have been arrested`, `police officers, students and school staff members`],
+  note: `<p>Students get active verbs: they blockade, they set fire. The arrests go passive: “have been arrested.” Thousands of whom? The sentence leaves out its most striking fact. The Check box has it.</p><p>Then one injury number for police, students, and school staff together. Three groups, two sides, one total. You can’t tell who hurt whom.</p>`,
+  check: `Justice Ministry, through Oct. 8: 6,877 people held in custody since the protests began; 86 percent were minors. ${src('JUST')} Education minister, Oct. 2: at least 170 students and 65 staff hurt. ${src('AJ2')} Interior Ministry, Oct. 17 alone: almost 1,000 police and gendarmes hurt. ${src('GULF')}`,
+  push: `The fires are pinned to the government’s count, “according to the government,” which is correct sourcing. And the injury figures kept changing; a single total may have been the only one reporters trusted.`,
+  think: `Most of the people arrested in this movement were children. Does leaving that out change how the sentence reads?`,
+  see: [8, 15] },
+
+{ sec: `st`, start: `The students’ anger has been`, end: `during the protests.`,
+  marks: [`the police’s forceful response`, `accusations of police misconduct`],
+  note: `<p>When students damage things, it’s violence. When police hurt students, it’s a “forceful response.” “Forceful” is a word for a handshake. “Response” tells you the police were only answering.</p><p>And “police misconduct” is the system’s own category: a rule broken, not a child hurt.</p>`,
+  check: `The police watchdog had 36 open inquiries by Oct. 13, so “at least 34” holds. ${src('AJ18')}`,
+  push: `This is the paper at its bluntest about police. It says in its own voice that police force made the students angrier, and it reports the investigations. “Misconduct” is the legal term for what the watchdog investigates.`,
+  think: `List the words the article uses for violence by protesters. Then list the words for violence by police. Compare the lists.` },
+
+{ sec: `st`, fair: true, start: `The cases include a 15-year-old`, end: `at close range.`,
+  marks: [`whose left hand was ripped off`, `most likely by the explosion of a police stun grenade`, `an officer had fired at close range`],
+  note: `<p>Read the first case slowly. A hand “was ripped off.” By what? “The explosion of a police stun grenade.” The grenade did it, by itself, and only “most likely.”</p><p>Now the second case: “an officer had fired at close range.” A person, a weapon, a distance. Same paragraph, two grammars. Ask why.</p>`,
+  check: `AP, citing a police researcher: six people maimed in three weeks, losing hands or eyes. The article gives two. ${src('AP')} Al Jazeera, citing Human Rights Watch, says the 14-year-old’s jaw was shattered by a tear-gas canister. ${src('AJ18W')}`,
+  push: `Here the critic’s case mostly fails. The hedge belongs to officials, and the paper says so. For the second boy, it names the officer as the doer. If your theory is “the Times goes easy on police,” this paragraph counts against it.`,
+  think: `Rewrite the first case so a person does the action. What would you need to know first?`,
+  see: [9, 14] },
+
+{ sec: `oth`, start: `This month, labor unions`, end: `range of issues.`,
+  marks: [`a broader range of issues`],
+  note: `<p>“A broader range of issues” is a shrug. Which issues? The next paragraph names two: living costs and fuel.</p><p>Notice what’s missing from the reasons. The budget that freezes public workers’ pay appears once, in ¶4, as “more debate to come.” It never shows up as a reason anyone marched. Did the unions name it? The article doesn’t say.</p>`,
+  push: `Unions march for many causes at once, and an explainer can’t list them all. Vague isn’t the same as false.`,
+  think: `Find every mention of the budget. Does the article ever connect it to why people are in the street?`,
+  see: [5] },
+
+{ sec: `oth`, start: `Some are angry over`, end: `agricultural costs.`,
+  marks: [`Some are angry`, `because of the war in Iran`],
+  note: `<p>Fuel prices “have surged, in part, because of the war in Iran.” A war, but no one fighting it. Who? The sentence doesn’t say, so the price spike arrives like a storm: nobody decided anything.</p><p>And “some are angry.” Feelings again, and “some.” Remember that word. It comes back.</p>`,
+  check: `The link to fuel holds. In late September, the EU’s energy commissioner said higher energy prices from the war had cost EU consumers more than €100 billion. ${src('FUEL')}`,
+  push: `Times readers that week knew about the war; this explainer is about France. Naming every side of a distant war in a sentence about French fuel prices would bury the point.`,
+  think: `When a price “surges,” who decided something? Name one person or group whose choices moved the price of fuel.`,
+  see: [29] },
+
+{ sec: `oth`, fair: true, start: `Social media accounts associated`, end: `for demonstrations.`,
+  marks: [`Social media accounts associated with`],
+  note: `<p>Not people. Not organizers. “Social media accounts associated with” a movement. The yellow vests come across as a vague presence online.</p>`,
+  push: `This may be the most careful sentence in the piece. The yellow vests never had official leaders, so “accounts associated with” is accurate. Saying more would mean guessing.`,
+  think: `Why would a reporter describe a movement by its social media accounts instead of its members?` },
+
+{ sec: `oth`, start: `Such discontent has a long`, end: `French society.`,
+  marks: [`Such discontent has a long history in France`],
+  note: `<p>The history paragraph. Its job: tell you the French protest a lot. That framing does work. It turns this week into a national habit, almost a personality trait, instead of a reaction to this budget and these schools. “Discontent” again: a mood, not a demand.</p>`,
+  push: `1968 is the obvious comparison, also led by students, and readers deserve it. The sentence even says those protests “helped transform French society,” which is a point in the students’ favor.`,
+  think: `Does “a long history” make these protests seem more serious, or less? Why?` },
+
+{ sec: `pol`, start: `On Monday, high-level officials`, end: `admitted failure.`,
+  marks: [`admitted failure`],
+  note: `<p>Officials admitting failure is rare. Hold on to it. Then ask: failed at what?</p><p>The next paragraphs answer: failed to stop the riots. Not failed the students. Not failed the schools. The only failure on the record is a policing failure, and the fix on offer is more policing (see ¶29).</p>`,
+  push: `That is what the ministers admitted, and the paper reports it straight. It’s unflattering to the government.`,
+  think: `What failure do the officials admit? What failure does nobody admit?`,
+  see: [30] },
+
+{ sec: `pol`, start: `Laurent Nuñez, the interior minister`, end: `in the country.`,
+  marks: [`something of an apology`, `spun off from the mostly peaceful protests`],
+  note: `<p>“Something of an apology.” Did he apologize or not? The paper rounds it down for him.</p><p>And now the riots “spun off from the mostly peaceful protests,” like a side branch. Back in ¶5, the violence was a “convergence” that took in the movements themselves. The article has several theories of who the rioters were, and uses whichever one fits the sentence it’s writing.</p>`,
+  check: `His words, as PBS reports them: he offered to resign “because I am responsible for everything that is happening.” ${src('PBS')}`,
+  push: `“Spun off” is the minister’s view, reported as his. Different officials held different theories, so different paragraphs carry different ones. That’s reporting a mess, not making one.`,
+  think: `Find three different answers the article gives to “Who were the rioters?” Which one does each paragraph use?`,
+  see: [6, 24] },
+
+{ sec: `pol`, fair: true, start: `He said he had offered`, end: `not been accepted.`,
+  marks: [`it had not been accepted`],
+  note: `<p>Nothing to flag. He offered to quit; Macron said no. The doer of “had not been accepted” is named in the same sentence.</p><p>Not every sentence is spin. A critic who finds spin in every line has stopped reading.</p>`,
+  check: `Al Jazeera reports the same: Macron turned down the resignation. ${src('AJ19')}`,
+  push: `Is “it had not been accepted” a hidden doer? Not here. A passive verb hides something only when the reader can’t tell who acted.`,
+  think: `Why might a president keep a minister who just said his police failed?` },
+
+{ sec: `pol`, start: `Mr. Darmanin, the justice minister`, end: `of the violence.`,
+  marks: [`the authorities`, `undeniably failed`],
+  note: `<p>The justice minister says “the authorities” failed. Look at that subject: a group so large that no single person is in it. Failure admitted; blame spread thin.</p>`,
+  push: `It’s his word choice, quoted exactly. Ministers rarely admit even this much on the record.`,
+  think: `Who counts as “the authorities”? Name the jobs that word covers.` },
+
+{ sec: `pol`, start: `Mr. Lecornu, the prime minister, struck`, end: `centrist government.`,
+  marks: [`struck a different tone`, `shadowy network`, `some far-right leaders and the centrist government`],
+  note: `<p>Two ministers say the authorities failed. The prime minister says the police did a good job. That isn’t a different “tone.” It’s a different set of facts, filed under style.</p><p>Then “shadowy network” goes in, in quotation marks, and the article never asks what backs it. And count the accusers: Lecornu, far-right leaders, and “the centrist government,” which Lecornu runs. He’s on the list twice.</p>`,
+  check: `In French, Lecornu said <span class="fr">toute une nébuleuse</span>: a whole nebula, a cloud with no edges. “Network” gives the cloud a shape. He said he believed intelligence services had told the government so “clearly.” ${src('AFP')} ${src('GOV')}`,
+  push: `The quotation marks do say “his words, not ours.” And what a head of government claims is news, evidence or not.`,
+  think: `If you were the reporter, what one question would you ask Lecornu about the “shadowy network”?`,
+  see: [4, 25, 27] },
+
+{ sec: `pol`, start: `They have pointed in particular`, end: `more likely.`,
+  marks: [`a major far-left party`, `has rejected the accusation`],
+  note: `<p>“Far left” covers two different things. France Unbowed is a party with seats in parliament. The street groups the government means, the <span class="fr">ultragauche</span>, are something else. One label lets the charge slide from rock-throwers to an election rival, six months before the election.</p>`,
+  check: `France 24’s French edition ran a story headlined that lumping France Unbowed in with the <span class="fr">ultragauche</span> could backfire on the government. ${src('F24FR')} First round of the election: April 18, 2027. ${src('PSELEC')}`,
+  push: `The accused party gets to answer in the next sentence. That is balance done the standard way. And English-language news commonly calls France Unbowed far-left.`,
+  think: `Who gains when voters hear “far left” and picture people smashing windows?`,
+  see: [24] },
+
+{ sec: `pol`, start: `Mr. Mélenchon said on social`, end: `public finances.`,
+  marks: [`incompetence or a worst-case strategy`],
+  note: `<p>Now the opposition’s theory, and it has the same flaw as the government’s. If the chaos was planned, that proves the “worst-case strategy.” If it wasn’t, that proves “incompetence.” A charge that can’t be wrong isn’t evidence.</p><p>The article prints both theories and tests neither.</p>`,
+  push: `Printing both sides’ claims and letting readers judge is exactly what a neutral explainer promises. Testing them would take reporting the paper may not have had by Tuesday.`,
+  think: `What would prove Mélenchon wrong? What would prove Lecornu wrong? Which claim is easier to test?`,
+  see: [24, 27] },
+
+{ sec: `pol`, start: `Mr. Lecornu has not responded`, end: `that accusation.`,
+  marks: [`has not responded`],
+  note: `<p>The section ends with two rivals trading charges. Missing: the one official whose job is to test the charge with evidence.</p><p>Monday morning, on TF1 television, Paris prosecutor Laure Beccuau said she could not confirm the government’s reading at all. The people in custody, she said, claimed no political side. That was public a day before this version ran. The article has room for the accused party’s leader, but not for her.</p>`,
+  check: `L’Express reported her words at 2:34 p.m. Paris time on Oct. 19. This version of the Times article reports events of Tuesday, Oct. 20. ${src('LEX')}`,
+  push: `“Can’t confirm” isn’t “false.” She also said those active in the Paris area might be ultra-left, citing the Interior Ministry’s analysis. A reporter could fairly call that too unsettled for a quick explainer.`,
+  think: `Who in France could test the prime minister’s claim with evidence? Why might an article leave that person out?`,
+  see: [24, 26] },
+
+{ sec: `nxt`, start: `As of the weekend, high`, end: `keep protesting.`,
+  marks: [`appeared determined`],
+  note: `<p>“Appeared determined.” Appeared to whom? No one from these groups is quoted, so their plans arrive as an impression.</p>`,
+  push: `Reporters write “appeared” when they’ve seen public calls to action but haven’t confirmed plans. That’s caution, not spin.`,
+  think: `What would a reporter have to do to replace “appeared” with a fact?` },
+
+{ sec: `nxt`, start: `Some who participated in`, end: `next weekend.`,
+  marks: [`Some who participated`],
+  note: `<p>Count the “somes.” Some are angry. Some of the groups. Some who participated. Every protester in this article is a “some.” Every official has a name and a title.</p>`,
+  push: `“Some” is accurate when you don’t have names. The fix is getting names, and that takes reporting time an explainer may not have.`,
+  think: `Go back through the article. Does any protester, student, or union member get a name?`,
+  see: [12, 17] },
+
+{ sec: `nxt`, start: `The government is trying to signal`, end: `around France.`,
+  marks: [`trying to signal that it is ready`, `police numbers would be reinforced`],
+  note: `<p>Last word: the interior minister. Last idea: more police. The article opened with France moving to “reassert order” and closes with the state “ready.” First voice, government. Last voice, government.</p><p>The students’ demands, schools and money, aren’t in the ending at all. What happens next, in this telling, is policing.</p>`,
+  push: `More police next weekend is the hard news about what comes next. Before you call the ending slanted, try writing a fairer one using only facts known on Tuesday.`,
+  think: `Write a last paragraph that tells readers what happens next for the students’ demands. Could you report it with what was known on Tuesday?`,
+  see: [2, 20] }
+];
+
+/* ---------- brief ---------- */
+const BRIEF = [
+  { key: `start`, tab: `Start here` },
+  { key: `who`, tab: `Who’s who` }
+];
+
+/* ---------- storage (this device only) ---------- */
+const KEY = `media-room-01:text`;
+const loadText = () => { try { return localStorage.getItem(KEY) || ``; } catch (e) { return ``; } };
+const saveText = v => { try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {} };
+
+/* ---------- matching a pasted copy ---------- */
+function rx(frag) {
+  const out = frag.trim().split(/\s+/).map(w => w
+    .replace(/[.*+?^${}()|[\]\\]/g, `\\$&`)
+    .replace(/['’‘]/g, `['’‘]`)
+    .replace(/["“”]/g, `["“”]`)
+    .replace(/-/g, `[-‐‑–]`)).join(`\\s+`);
+  return new RegExp(out, `i`);
+}
+const esc = s => s.replace(/&/g, `&amp;`).replace(/</g, `&lt;`).replace(/>/g, `&gt;`);
+
+let FOUND = [];   // per paragraph: text or null
+function match(raw) {
+  FOUND = P.map(() => null);
+  if (!raw) return 0;
+  let pos = 0, n = 0;
+  P.forEach((d, i) => {
+    const rest = raw.slice(pos);
+    const a = rest.search(rx(d.start));
+    if (a < 0) return;
+    const from = pos + a;
+    const tail = raw.slice(from);
+    const m = tail.match(rx(d.end));
+    if (!m || m.index > 1800) return;
+    const to = from + m.index + m[0].length;
+    let t = raw.slice(from, to).replace(/\s+/g, ` `).trim();
+    if (/[”"]$/.test(raw.slice(to, to + 1))) t += raw.slice(to, to + 1);
+    FOUND[i] = t;
+    pos = to; n++;
+  });
+  return n;
+}
+
+function marked(text, marks) {
+  const spans = [];
+  marks.forEach(mk => {
+    const m = text.match(rx(mk));
+    if (m) spans.push([m.index, m.index + m[0].length]);
+  });
+  spans.sort((x, y) => x[0] - y[0]);
+  let h = ``, at = 0;
+  spans.forEach(([s, e]) => {
+    if (s < at) return;
+    h += esc(text.slice(at, s)) + `<mark>` + esc(text.slice(s, e)) + `</mark>`;
+    at = e;
+  });
+  return h + esc(text.slice(at));
+}
+
+/* ---------- labels ---------- */
+const label = i => i === 0 ? `Headline` : i === 1 ? `Subhead` : `¶ ${i - 1}`;
+const short = i => i === 0 ? `H` : i === 1 ? `S` : `${i - 1}`;
+const refs = list => list.map(n => `<button class="ref" data-go="text:${n}">${label(n)}</button>`).join(`, `);
+const note = (h, body, cls = ``) => `<div class="note ${cls}"><h2>${h}</h2>${body.startsWith(`<`) ? body : `<p>${body}</p>`}</div>`;
+const $ = id => document.getElementById(id);
+
+/* ---------- views ---------- */
+function renderText(d, i) {
+  $(`loc`).textContent = SEC[d.sec][1];
+  $(`who`).textContent = label(i);
+  const kick = `<p class="kicker">${SEC[d.sec][1]} · ${label(i)}${d.fair ? ` · <b>The Times gets it right</b>` : ``}</p>`;
+  const clip = `<div class="clip">${d.marks.map(m => `<mark>${esc(m)}</mark>`).join(`<span class="sep">·</span>`)}</div>`;
+  const cls = d.kind === `hed` ? `para hed` : d.kind === `dek` ? `para dek` : `para`;
+  let L = kick;
+  if (FOUND[i]) L += `<p class="${cls}">${marked(FOUND[i], d.marks)}</p>`;
+  else if (loadText()) L += clip + `<p class="hint">This paragraph isn’t in your copy. The Times updates this page, so yours may be a different version.</p>`;
+  else L += `<div class="card"><h3>Load the article first</h3><p class="plain">Open the class copy from Google Classroom. Select all, copy, and paste it here. It loads by itself and stays on this device.</p>
+      <textarea id="paste" aria-label="Paste the article"></textarea><div class="row"><span class="status" id="status" aria-live="polite">Nothing loaded yet.</span></div></div>` + clip;
+  L += `<div class="card think"><p class="kicker">Think about it</p><p>${d.think}</p></div>`;
+  $(`left`).innerHTML = L;
+  let N = note(`Critic’s note`, d.note, `crit`);
+  if (d.check) N += note(`Check`, d.check, `check`);
+  N += note(`Push back`, d.push, `push`);
+  if (d.see && d.see.length) N += note(`See also`, `<p>${refs(d.see)}</p>`);
+  $(`notes`).innerHTML = N;
+}
+
+function renderBrief(d) {
+  $(`loc`).textContent = ``;
+  $(`who`).textContent = ``;
+  if (d.key === `start`) {
+    const got = FOUND.filter(Boolean).length, has = !!loadText();
+    $(`left`).innerHTML = `
+      <p class="kicker">Reading 01 · Start here</p>
+      <div class="art">
+        <p class="t">Huge Riots and Antigovernment Protests in France: What to Know</p>
+        <p class="by">The New York Times keeps updating this page, and earlier versions have different numbers and wording. This room reads the version that reports Tuesday, Oct. 20, 2026.</p>
+        <a href="${SRC.NYT[1]}" target="_blank" rel="noopener">Open the article &#8599;</a>
+      </div>
+      <div class="card">
+        <h3>Load the article</h3>
+        <p class="plain">Paste your class copy here. Each paragraph lands next to its note. Your copy stays on this device.</p>
+        <textarea id="paste" aria-label="Paste the article">${esc(loadText())}</textarea>
+        <div class="row">
+          <button class="btn" type="button" id="load">Load</button>
+          <button class="btn" type="button" id="clear">Clear</button>
+          <span class="status ${has && got === P.length ? `ok` : ``}" id="status" aria-live="polite">${has ? status(got) : `Nothing loaded yet.`}</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Teachers: make a class link</h3>
+        <p class="plain">After you load your copy, this makes one link that opens the room with the article already in it. Post it in Google Classroom. Anyone with the link can read your copy, so keep it in Classroom.</p>
+        <div class="row"><button class="btn" type="button" id="mklink">Make and copy the link</button><span class="status" id="linkst" aria-live="polite"></span></div>
+        <input class="linkout" id="linkout" type="text" readonly hidden aria-label="Class link">
+      </div>
+      <h2>How to read it</h2>
+      <ol class="steps">
+        <li>Load the article above, if your class link didn’t already.</li>
+        <li>Open Article. Read each critic’s note and its push back.</li>
+        <li>Decide who wins. Sometimes it’s the Times.</li>
+      </ol>`;
+    $(`notes`).innerHTML =
+      note(`Whose voice?`, `<p>The critic’s notes are written in the style of Adam Johnson, a media critic who co-hosts the podcast <em>Citations Needed</em>. They imitate his approach. They are not his words.</p><p>He asks the same questions of every news story. Who gets quoted? Who does the action in the sentence? Whose words does the paper repeat as its own? Who is left out?</p>`, `crit`) +
+      note(`Why push back?`, `<p>Every note ends with the strongest case for the Times. A critic who finds fault with everything tells you nothing, because you can’t tell when he’s right.</p><p>In four places, marked green on the bar at the bottom, the Times gets it right or the critic’s case falls apart.</p>`, `push`) +
+      note(`Background`, `Since September, French high school students have blocked schools to protest crowded classrooms, crumbling buildings, and too few teachers. In October, unions, farmers, and yellow-vest groups angry about fuel prices and the cost of living joined them. On Saturday, Oct. 17, more than half a million people marched, and riots broke out in many cities. France elects a new president in April and May 2027.`);
+    return;
+  }
+  $(`left`).innerHTML = `<p class="kicker">Reading 01</p><h2>Who’s Who</h2><dl class="ppl">
+    <dt>Emmanuel Macron</dt><dd>President of France. Can’t run again.</dd>
+    <dt>Sébastien Lecornu</dt><dd>Prime minister. Runs the government day to day.</dd>
+    <dt>Laurent Nuñez</dt><dd>Interior minister. In charge of the police.</dd>
+    <dt>Gérald Darmanin</dt><dd>Justice minister. In charge of courts and prisons.</dd>
+    <dt>Jean-Luc Mélenchon</dt><dd>Leader of France Unbowed, a major far-left party.</dd>
+    <dt>Laure Beccuau</dt><dd>Paris prosecutor. Brings criminal cases in Paris. Not in the article; see ${refs([27])}.</dd>
+    <dt>The CGT</dt><dd>One of France’s biggest labor unions.</dd>
+  </dl>`;
+  $(`notes`).innerHTML = note(`Key terms`, `<dl>
+    <dt>Curfew</dt><dd>An order to stay indoors during set hours, usually at night.</dd>
+    <dt>Yellow vests</dt><dd>A protest movement that began in 2018 over fuel taxes, named for the safety vests French drivers must carry.</dd>
+    <dt><span class="fr">Ultragauche</span></dt><dd>“Ultra-left.” Small street groups, not a political party.</dd>
+    <dt>Marianne</dt><dd>The woman who stands for the French Republic. Town halls display her bust.</dd>
+    <dt>Explainer</dt><dd>A news story that sums up an event for readers who missed it. It claims to tell you what you need to know.</dd>
+  </dl>`);
+}
+
+function doLoad(v) {
+  v = (v || ``).trim();
+  saveText(v);
+  const got = match(v);
+  const s = $(`status`);
+  if (s) { s.textContent = v ? status(got) : `Nothing loaded yet.`; s.className = `status ${v && got === P.length ? `ok` : ``}`; }
+  if (view === `text` && got) render();
+  return got;
+}
+async function pack(str) {
+  const buf = await new Response(new Blob([str]).stream().pipeThrough(new CompressionStream(`deflate-raw`))).arrayBuffer();
+  let bin = ``; new Uint8Array(buf).forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin).replace(/\+/g, `-`).replace(/\//g, `_`).replace(/=+$/, ``);
+}
+async function unpack(str) {
+  let b = str.replace(/-/g, `+`).replace(/_/g, `/`); while (b.length % 4) b += `=`;
+  const bytes = Uint8Array.from(atob(b), c => c.charCodeAt(0));
+  return await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream(`deflate-raw`))).text();
+}
+let pasteTimer = null;
+document.addEventListener(`input`, e => {
+  if (e.target.id !== `paste`) return;
+  clearTimeout(pasteTimer);
+  pasteTimer = setTimeout(() => { if (e.target.value.trim().length > 200) doLoad(e.target.value); }, 400);
+});
+
+function status(got) { return got === P.length ? `Loaded. All ${P.length} paragraphs found.` : `Found ${got} of ${P.length} paragraphs. The rest may differ in your version.`; }
+
+/* ---------- shell ---------- */
+const VIEWS = { brief: BRIEF, text: P };
+let view = `brief`, idx = { brief: 0, text: 0 };
+
+function stripHTML() {
+  if (view === `text`) {
+    let last = null, h = ``;
+    P.forEach((d, k) => {
+      if (d.sec !== last) { if (last !== null) h += `</span>`; h += `<span class="grp"><span class="part">${SEC[d.sec][0]}</span>`; last = d.sec; }
+      h += `<button data-go="text:${k}" class="${d.fair ? `fair` : ``}" aria-label="${label(k)}">${short(k)}</button>`;
+    });
+    return h + `</span>`;
+  }
+  return `<span class="grp">` + BRIEF.map((d, k) => `<button class="wide" data-go="brief:${k}">${d.tab}</button>`).join(``) + `</span>`;
+}
+
+function render() {
+  const list = VIEWS[view], i = idx[view] = Math.max(0, Math.min(list.length - 1, idx[view]));
+  document.querySelectorAll(`.tabs button`).forEach(b => b.setAttribute(`aria-selected`, b.dataset.view === view));
+  if (view === `text`) renderText(list[i], i); else renderBrief(list[i]);
+  $(`count`).textContent = ``;
+  $(`strip`).innerHTML = stripHTML();
+  document.querySelectorAll(`.strip button`).forEach((b, k) => b.setAttribute(`aria-current`, k === i));
+  $(`prev`).disabled = i === 0;
+  $(`next`).disabled = i === list.length - 1;
+  $(`left`).scrollTop = 0; $(`notes`).scrollTop = 0;
+  try { history.replaceState(null, ``, view === `text` ? `#p${i + 1}` : `#brief-${BRIEF[i].key}`); } catch (e) {}
+}
+function go(v, i) { view = v; idx[v] = i; render(); if (window.matchMedia(`(max-width: 800px)`).matches) window.scrollTo(0, 0); }
+
+document.addEventListener(`click`, e => {
+  const t = e.target.closest(`[data-go],[data-view],#load,#clear,#mklink`);
+  if (!t) return;
+  if (t.id === `load`) {
+    doLoad($(`paste`).value);
+  } else if (t.id === `mklink`) {
+    const v = loadText(), st = $(`linkst`);
+    if (!v) { st.textContent = `Load your copy first.`; return; }
+    pack(v).then(code => {
+      const url = location.href.split(`#`)[0] + `#a=` + code;
+      const out = $(`linkout`); out.hidden = false; out.value = url; out.select();
+      const done = () => { st.textContent = `Copied. Paste it into Classroom.`; };
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, () => { st.textContent = `Copy the link from the box below.`; });
+      else st.textContent = `Copy the link from the box below.`;
+    }).catch(() => { st.textContent = `This browser can’t make the link. Try Chrome.`; });
+  } else if (t.id === `clear`) {
+    saveText(``); match(``); $(`paste`).value = ``;
+    $(`status`).textContent = `Cleared.`; $(`status`).className = `status`;
+  } else if (t.dataset.go) { const [v, i] = t.dataset.go.split(`:`); go(v, +i); }
+  else if (t.dataset.view) { view = t.dataset.view; render(); }
+});
+document.addEventListener(`keydown`, e => {
+  if (e.target.matches(`textarea, input`)) return;
+  if (e.key === `ArrowRight`) { idx[view]++; render(); }
+  if (e.key === `ArrowLeft`) { idx[view]--; render(); }
+});
+$(`prev`).onclick = () => { idx[view]--; render(); };
+$(`next`).onclick = () => { idx[view]++; render(); };
+
+(async function start() {
+  const h = location.hash;
+  let m;
+  if (h.startsWith(`#a=`)) {
+    try { const v = await unpack(h.slice(3)); saveText(v.trim()); FOUND = []; } catch (e) {}
+    match(loadText());
+    view = match(loadText()) ? `text` : `brief`;
+    render();
+    return;
+  }
+  match(loadText());
+  if ((m = h.match(/^#p(\d+)$/))) { view = `text`; idx.text = +m[1] - 1; }
+  else if ((m = h.match(/^#brief-(\w+)$/))) { const k = BRIEF.findIndex(d => d.key === m[1]); idx.brief = k < 0 ? 0 : k; }
+  render();
+})();
+</script>
+</body>
+</html>
