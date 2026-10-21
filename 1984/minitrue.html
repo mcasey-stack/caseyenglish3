@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A daily game for the 1984 unit: name the answer nobody else gives.">
+<title>Minitrue</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&display=swap">
+<style>
+/* Layout: one narrow column. The Ministry of Truth sits on top on every screen; the panel below changes:
+   rules, round, end of the climb, high scores. One 8-bit look in every theme: a cold grey London sky,
+   the white pyramid, Party red. */
+:root {
+  --night: #0d0f15;
+  --panel: #20232d;
+  --panel-hi: #333746;
+  --edge: #05060a;
+  --ink: #f4f1ea;
+  --muted: #a9aab7;
+  --red: #ff004d;
+  --red-btn: #d6003c;
+  --red-deep: #6e0f2c;
+  --steel: #c2c3c7;
+  --t-top: #ff004d;
+  --t-s: #ffa300;
+  --t-r: #ffec27;
+  --t-u: #29adff;
+  --t-e: #e6e2dc;
+  --t-miss: #5f574f;
+  --dark-ink: #11131a;
+  --pixel: "Press Start 2P", "Courier New", ui-monospace, monospace;
+  --text: "Pixelify Sans", "Trebuchet MS", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--text); font-size: 18px; line-height: 1.35; -webkit-font-smoothing: none; }
+.app {
+  max-width: 34rem; margin: 0 auto; min-height: 100%;
+  display: flex; flex-direction: column; gap: 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px 24px;
+}
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+p { margin: 0; }
+
+.home { align-self: flex-start; color: var(--muted); font-family: var(--pixel); font-size: 9px; letter-spacing: 0.06em; text-decoration: none; line-height: 1.6; }
+.home:hover { color: var(--ink); }
+
+/* Top bar */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mark { margin: 0; font-family: var(--pixel); font-weight: 400; font-size: 18px; letter-spacing: 0.06em; color: var(--ink); text-shadow: 3px 3px 0 var(--red-btn); }
+.meta { font-family: var(--pixel); font-size: 9px; color: var(--muted); letter-spacing: 0.04em; line-height: 1.6; }
+.alt { font-family: var(--pixel); font-size: 13px; white-space: nowrap; color: var(--ink); }
+.alt small { font-size: 9px; color: var(--muted); }
+
+/* The Ministry */
+.scene { display: block; width: 100%; height: auto; max-width: 100%; border: 4px solid var(--edge); box-shadow: 4px 4px 0 var(--edge); background: #1b1d26; }
+.scene .lbl { fill: #5f574f; font-family: var(--pixel); font-size: 6px; }
+.scene .slogan { fill: #2a2433; font-family: var(--pixel); font-size: 6px; }
+.climber { transition: transform 1.2s steps(14, end); }
+.heli { animation: patrol 9s steps(18) infinite alternate; }
+.heli .lamp { animation: blink 1s steps(1) infinite; }
+.glint { animation: blink 2.4s steps(1) infinite; }
+.glint:nth-child(2n) { animation-delay: -0.8s; }
+.glint:nth-child(3n) { animation-delay: -1.6s; }
+@keyframes patrol { from { transform: translate(0, 0); } 50% { transform: translate(40px, 4px); } to { transform: translate(90px, -2px); } }
+
+/* Panels */
+.card { background: var(--panel); border: 4px solid var(--edge); box-shadow: 4px 4px 0 var(--edge), inset 0 0 0 2px var(--panel-hi); padding: 18px 16px 20px; display: flex; flex-direction: column; gap: 14px; }
+.kicker { font-family: var(--pixel); font-size: 9px; letter-spacing: 0.04em; line-height: 1.6; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.lead { font-family: var(--text); font-weight: 700; font-size: clamp(1.55rem, 6vw, 1.95rem); line-height: 1.12; color: var(--ink); text-wrap: balance; }
+.lead em { font-style: normal; color: var(--red); }
+.prompt { margin: 0; font-family: var(--text); font-weight: 600; font-size: clamp(1.55rem, 6.4vw, 2rem); line-height: 1.15; text-wrap: balance; }
+.rules { max-width: 62ch; }
+.fine { color: var(--muted); font-size: 0.95rem; }
+
+.btn { appearance: none; border: 0; border-radius: 0; background: var(--red-btn); color: #fff; font-family: var(--pixel); font-size: 11px; letter-spacing: 0.04em; line-height: 1.4; padding: 13px 14px 12px; cursor: pointer; box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), 0 4px 0 var(--edge); }
+.btn:hover { background: #ec0045; }
+.btn:active { transform: translateY(2px); box-shadow: inset -3px -3px 0 rgba(0,0,0,0.3), 0 2px 0 var(--edge); }
+.btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+.btn.quiet { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 3px var(--ink); }
+.btn.quiet:hover { color: #ff5c7a; box-shadow: inset 0 0 0 3px #ff5c7a; }
+.row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 14px; }
+
+/* Newspeak grades: top rung is the rarest */
+.ladder { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 10px; }
+.ladder li { display: flex; }
+.ladder .chip b { font-weight: 400; margin-left: 0.6em; }
+
+.chip { display: inline-block; padding: 5px 7px 4px; font-family: var(--pixel); font-size: 9px; letter-spacing: 0.02em; line-height: 1.3; color: var(--dark-ink); background: var(--t-e); white-space: nowrap; box-shadow: 0 3px 0 var(--edge); }
+.chip[data-t="top"] { background: var(--t-top); color: #fff; }
+.chip[data-t="s"] { background: var(--t-s); }
+.chip[data-t="r"] { background: var(--t-r); }
+.chip[data-t="u"] { background: var(--t-u); }
+.chip[data-t="e"] { background: var(--t-e); }
+.chip[data-t="miss"] { background: var(--t-miss); color: var(--ink); }
+
+/* Timer: one block a second */
+.clock { display: flex; align-items: center; gap: 10px; }
+.track { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(25, 1fr); gap: 2px; height: 14px; padding: 2px; background: var(--edge); }
+.track span { background: var(--steel); }
+.track span.off { background: #262935; }
+.clock.low .track span:not(.off) { background: var(--red); }
+.secs { width: 2.6rem; text-align: right; font-family: var(--pixel); font-size: 12px; }
+.clock.low .secs { color: var(--red); }
+
+/* Guess form */
+#askArea, #resultArea { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+#resultArea .btn { justify-self: start; margin-top: 4px; }
+.guess { display: flex; gap: 10px; }
+.guess input { flex: 1; min-width: 0; border: 0; border-radius: 0; background: var(--night); color: var(--ink); padding: 11px 12px; font-size: 1.2rem; box-shadow: inset 0 0 0 3px var(--edge), inset 3px 3px 0 3px #000; caret-color: var(--red); }
+.guess input::placeholder { color: #6b6d80; }
+.shake { animation: shake 0.3s steps(3); }
+@keyframes shake { 33% { transform: translateX(-6px); } 66% { transform: translateX(6px); } }
+.feedback { min-height: 1.4em; color: #ff6b8f; }
+.misses { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); }
+.misses li { text-decoration: line-through; }
+
+/* Result */
+.verdict { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
+.gain { font-family: var(--pixel); font-size: 10px; line-height: 1.6; color: var(--ink); }
+.yours { font-size: 1.5rem; line-height: 1.2; font-weight: 600; }
+.yours.none { color: var(--muted); font-weight: 400; }
+
+/* End of a climb */
+.height { font-family: var(--pixel); font-size: clamp(1.9rem, 9vw, 2.5rem); line-height: 1.1; color: var(--ink); text-shadow: 4px 4px 0 var(--red-btn); }
+.height small { font-size: 0.45em; color: var(--muted); text-shadow: none; }
+.bandname { font-size: 1.25rem; color: var(--ink); }
+.squares { font-size: 1.4rem; letter-spacing: 0.06em; user-select: all; }
+.copied { color: var(--muted); }
+.post { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; padding: 12px; background: var(--edge); }
+.post label { font-family: var(--pixel); font-size: 9px; line-height: 1.7; color: var(--muted); }
+.post input { width: 5.6em; font-family: var(--pixel); font-size: 20px; letter-spacing: 0.35em; text-transform: uppercase; padding: 8px 2px 6px 10px; border: 0; border-bottom: 4px solid var(--red); border-radius: 0; background: transparent; color: var(--ink); }
+.post input::placeholder { color: #5b5d70; }
+.posted { color: var(--muted); }
+.recap { list-style: none; margin: 0; padding: 12px 0 0; display: grid; gap: 6px; border-top: 3px dashed var(--panel-hi); }
+.recap li { display: grid; grid-template-columns: 0.75rem 1fr auto; gap: 8px; align-items: center; font-size: 1rem; }
+.recap .dot { width: 0.75rem; height: 0.75rem; background: var(--t-miss); }
+.recap .dot[data-t="top"] { background: var(--t-top); }
+.recap .dot[data-t="s"] { background: var(--t-s); }
+.recap .dot[data-t="r"] { background: var(--t-r); }
+.recap .dot[data-t="u"] { background: var(--t-u); }
+.recap .dot[data-t="e"] { background: var(--t-e); }
+.recap .q { min-width: 0; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recap .a { font-weight: 600; text-align: right; }
+.close { font-size: 1.05rem; color: var(--muted); }
+.close em { font-style: normal; color: var(--ink); }
+
+/* High scores: an arcade cabinet's table */
+.arcade { background: var(--edge); color: var(--ink); border: 4px solid #000; box-shadow: 4px 4px 0 #000, inset 0 0 0 3px var(--panel-hi); padding: 22px 16px 20px; display: flex; flex-direction: column; gap: 16px; font-family: var(--pixel); }
+.arc-title { text-align: center; color: var(--red); font-size: 16px; letter-spacing: 0.08em; line-height: 1.5; text-shadow: 3px 3px 0 var(--red-deep); }
+.arc-tabs { display: flex; justify-content: center; gap: 10px; }
+.arc-tabs button { appearance: none; background: transparent; border: 0; border-bottom: 4px solid transparent; color: var(--muted); font-family: var(--pixel); font-size: 10px; padding: 8px 6px; cursor: pointer; }
+.arc-tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--red); }
+.arc-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: 12px; line-height: 1.4; }
+.arc-rows li { display: grid; grid-template-columns: 4.4em 1fr auto; gap: 8px; align-items: baseline; }
+.arc-rows li:nth-child(1) { color: var(--red); }
+.arc-rows li:nth-child(2) { color: #ff8fa6; }
+.arc-rows li:nth-child(3) { color: var(--t-s); }
+.arc-rows .rank { color: inherit; opacity: 0.75; }
+.arc-rows .who { letter-spacing: 0.25em; }
+.arc-rows .m { text-align: right; }
+.arc-rows li.me { color: var(--t-u); animation: blink 0.5s steps(1) 6; }
+.arc-rows .empty { grid-template-columns: 1fr; color: var(--muted); text-align: center; line-height: 1.8; }
+@keyframes blink { 50% { opacity: 0; } }
+.arc-foot { text-align: center; color: var(--muted); font-size: 9px; line-height: 1.8; }
+.arcade .row { justify-content: center; }
+
+@media (max-width: 380px) {
+  .arc-rows { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .climber { transition: none; }
+  .shake, .arc-rows li.me, .heli, .heli .lamp, .glint { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <a class="home" href="./">&#8617; 1984 Reading Room</a>
+  <header class="bar">
+    <h1 class="mark">Minitrue</h1>
+    <span class="meta" id="metaLabel">Day 1</span>
+    <span class="alt"><span id="altNum">0</span> <small>m</small></span>
+  </header>
+
+  <svg class="scene" id="scene" viewBox="0 0 360 132" shape-rendering="crispEdges" role="img" aria-label="Winston carrying a paper up the Ministry of Truth, at 0 meters">
+    <g id="bg" aria-hidden="true"></g>
+    <g id="heli" class="heli" aria-hidden="true"></g>
+    <g id="climber" class="climber" aria-hidden="true"></g>
+  </svg>
+
+  <section class="card" id="startCard" aria-labelledby="startLead">
+    <p class="kicker"><span>7 prompts</span><span>25 seconds each</span></p>
+    <p class="lead" id="startLead">The answer everyone gives barely gets you off the <em>ground floor</em>.</p>
+    <p class="rules">A right answer ends the round, so hold out for a rare one. A wrong answer costs 3 seconds. Missed answers go down the memory hole, so climb again.</p>
+    <ol class="ladder" id="ladder"></ol>
+    <div class="row">
+      <button class="btn" id="startBtn" type="button">Start the climb</button>
+      <button class="btn quiet" id="scoresBtn" type="button">Scores</button>
+    </div>
+    <p class="fine" id="startFine">Rarity is an estimate. New prompts at midnight.</p>
+  </section>
+
+  <section class="card" id="playCard" hidden>
+    <p class="kicker"><span id="groupLabel">From the novel</span><span id="roundLabel">1 of 7</span></p>
+    <h2 class="prompt" id="promptText">Name a character in 1984.</h2>
+    <div id="askArea">
+      <div class="clock" id="clock">
+        <div class="track" id="track"></div>
+        <span class="secs" id="timerNum">25</span>
+      </div>
+      <form class="guess" id="guessForm" autocomplete="off">
+        <input id="guess" name="guess" type="text" aria-label="Your answer" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go" placeholder="Your answer">
+        <button class="btn" id="sendBtn" type="submit">Send</button>
+      </form>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+      <ul class="misses" id="misses"></ul>
+    </div>
+    <div id="resultArea" hidden aria-live="polite">
+      <div class="verdict"><span class="chip" id="resTier" data-t="e">Doubleplusgood</span><span class="gain" id="resGain">+10 points</span></div>
+      <p class="yours" id="resAnswer">Winston</p>
+      <button class="btn" id="nextBtn" type="button">Next prompt</button>
+    </div>
+  </section>
+
+  <section class="card" id="endCard" hidden>
+    <p class="kicker" id="endMode" hidden>Practice run, not on the board</p>
+    <p class="height"><span id="endMeters">0</span> <small>m</small></p>
+    <p class="bandname" id="endBand">Still on the ground floor</p>
+    <div class="row">
+      <span class="squares" id="endSquares" aria-label="Your seven rounds"></span>
+      <button class="btn quiet" id="copyBtn" type="button">Copy result</button>
+      <span class="copied" id="copyMsg" aria-live="polite"></span>
+    </div>
+    <form class="post" id="postForm" autocomplete="off" hidden>
+      <label for="initials">ENTER YOUR<br>INITIALS</label>
+      <input id="initials" name="initials" type="text" maxlength="3" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="AAA" enterkeyhint="send">
+      <button class="btn" id="postBtn" type="submit">POST</button>
+    </form>
+    <p class="feedback" id="postMsg" aria-live="polite" hidden></p>
+    <ol class="recap" id="recap"></ol>
+    <div class="row">
+      <button class="btn" id="againBtn" type="button">Play again</button>
+      <button class="btn quiet" id="endScoresBtn" type="button">Scores</button>
+    </div>
+    <p class="close">The paper goes down the memory hole. <em>Who controls the past controls the future.</em></p>
+  </section>
+
+  <section class="arcade" id="boardCard" hidden aria-labelledby="boardTitle">
+    <p class="arc-title" id="boardTitle">HIGH SCORES</p>
+    <div class="arc-tabs" role="tablist">
+      <button type="button" role="tab" id="tabToday" data-tab="today" aria-selected="true">TODAY</button>
+      <button type="button" role="tab" id="tabAll" data-tab="all" aria-selected="false">ALL TIME</button>
+    </div>
+    <ol class="arc-rows" id="boardRows" aria-live="polite"></ol>
+    <p class="arc-foot" id="boardFoot"></p>
+    <div class="row">
+      <button class="btn" id="boardPlay" type="button">Play</button>
+      <button class="btn quiet" id="boardBack" type="button">Back</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Minitrue engine: pure functions shared by the page and the tests. */
+var Engine = (function () {
+  var STOP = { a: 1, an: 1, the: 1, of: 1, his: 1, her: 1, their: 1, its: 1, and: 1, "in": 1, at: 1, to: 1, mr: 1, comrade: 1, my: 1, your: 1 };
+  var TIERS = {
+    top: { name: "Doubleplusungood", pts: 100, emoji: "🟥" },
+    s: { name: "Plusungood", pts: 85, emoji: "🟧" },
+    r: { name: "Ungood", pts: 60, emoji: "🟨" },
+    u: { name: "Plusgood", pts: 30, emoji: "🟦" },
+    e: { name: "Doubleplusgood", pts: 10, emoji: "⬜" },
+    miss: { name: "Out of time", pts: 0, emoji: "⬛" }
+  };
+  var ORDER = ["top", "s", "r", "u", "e"];
+  var MAX_POINTS = 700, TOP_METERS = 300;
+
+  // The same folding the server uses: no accents, case, punctuation, small words, or plural s.
+  function norm(str) {
+    var s = String(str || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    s = s.replace(/œ/g, "oe").replace(/æ/g, "ae").replace(/ß/g, "ss");
+    s = s.replace(/[’'`´ʼ‘]/g, "").replace(/&/g, " and ");
+    s = s.replace(/[^a-z0-9]+/g, " ").trim();
+    if (!s) return "";
+    var w = s.split(" "), kept = w.filter(function (x) { return !STOP[x]; });
+    if (kept.length) w = kept;
+    return w.map(function (x) { return x.length > 3 && x.charAt(x.length - 1) === "s" && x.charAt(x.length - 2) !== "s" ? x.slice(0, -1) : x; }).join("");
+  }
+
+  function nyDate(date) {
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).format(date);
+  }
+  function dayNumber(dateStr, epoch) {
+    var ms = Date.parse(dateStr + "T00:00:00Z") - Date.parse(epoch + "T00:00:00Z");
+    return Math.max(1, Math.floor(ms / 86400000) + 1);
+  }
+  function meters(points) { return Math.round(points * TOP_METERS / MAX_POINTS); }
+
+  function band(points) {
+    if (points >= 550) return "At the top of the Ministry";
+    if (points >= 400) return "Near the top";
+    if (points >= 250) return "Halfway up";
+    if (points >= 100) return "On the lower terraces";
+    return "Still on the ground floor";
+  }
+
+  return { TIERS: TIERS, ORDER: ORDER, MAX_POINTS: MAX_POINTS, norm: norm, nyDate: nyDate, dayNumber: dayNumber, meters: meters, band: band };
+})();
+if (typeof module !== "undefined") module.exports = Engine;
+</script>
+<script>
+(function () {
+  "use strict";
+  var E = Engine;
+  var DATA = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob("eyJlcG9jaCI6IjIwMjYtMTAtMjEiLCJncm91cHMiOnsiQSI6IkZyb20gdGhlIG5vdmVsIiwiQiI6Ik5ld3NwZWFrIiwiQyI6Ik9yd2VsbCIsIkQiOiJXaWRlciB3b3JsZCJ9LCJkYXlzIjpbWyJjaGFyYWN0ZXJzIiwibmV3c3BlYWsiLCJkeXN0b3BpYW4iLCJtaW5pc3RyaWVzIiwib3J3ZWxsLXdvcmtzIiwiZm9vZCIsInJhdHMiXSxbInBsYWNlcyIsIm9iamVjdHMiLCJjdXQtd29yZHMiLCJkZXZpY2VzIiwib3J3ZWxsLWNvdW50cmllcyIsInZpY3RvcnkiLCJhcnJlc3RlZCJdLFsiam9icyIsImNyaW1lLXRoaW5rIiwicm9vbSIsImxvbmRvbiIsImluc3BpcmF0aW9ucyIsInNob3J0YWdlcyIsInBvc3RlcnMiXSxbInN1cGVyc3RhdGVzIiwidGVsZXNjcmVlbiIsIndvcmRzLXRvZGF5IiwiYW5pbWFsLWZhcm0iLCJjcmltZXMiLCJidWlsZGluZ3MiLCJvcndlbGwtam9icyJdXSwicHJvbXB0cyI6eyJjaGFyYWN0ZXJzIjp7InEiOiJOYW1lIGEgY2hhcmFjdGVyIGluIDE5ODQuIiwic2hvcnQiOiIxOTg0IGNoYXJhY3RlciIsImciOiJBIn0sIm5ld3NwZWFrIjp7InEiOiJOYW1lIGEgTmV3c3BlYWsgd29yZC4iLCJzaG9ydCI6Ik5ld3NwZWFrIHdvcmQiLCJnIjoiQiJ9LCJkeXN0b3BpYW4iOnsicSI6Ik5hbWUgYSBkeXN0b3BpYW4gYm9vaywgbW92aWUsIG9yIHNob3cuIiwic2hvcnQiOiJEeXN0b3BpYSIsImciOiJEIn0sIm1pbmlzdHJpZXMiOnsicSI6Ik5hbWUgb25lIG9mIHRoZSBmb3VyIE1pbmlzdHJpZXMuIiwic2hvcnQiOiJNaW5pc3RyeSIsImciOiJBIn0sIm9yd2VsbC13b3JrcyI6eyJxIjoiTmFtZSBhIGJvb2sgb3IgZXNzYXkgYnkgR2VvcmdlIE9yd2VsbC4iLCJzaG9ydCI6Ik9yd2VsbCB3b3JrIiwiZyI6IkMifSwiZm9vZCI6eyJxIjoiTmFtZSBzb21ldGhpbmcgcGVvcGxlIGVhdCBvciBkcmluayBpbiAxOTg0LiIsInNob3J0IjoiRm9vZCBvciBkcmluayIsImciOiJBIn0sInJhdHMiOnsicSI6Ik5hbWUgYSBmYW1vdXMgcmF0IG9yIG1vdXNlIGZyb20gYSBib29rLCBtb3ZpZSwgb3Igc2hvdy4iLCJzaG9ydCI6IlJhdCBvciBtb3VzZSIsImciOiJEIn0sInBsYWNlcyI6eyJxIjoiTmFtZSBhIHBsYWNlIGluIDE5ODQuIiwic2hvcnQiOiIxOTg0IHBsYWNlIiwiZyI6IkEifSwib2JqZWN0cyI6eyJxIjoiTmFtZSBhbiBvYmplY3QgdGhhdCBtYXR0ZXJzIGluIDE5ODQuIiwic2hvcnQiOiJLZXkgb2JqZWN0IiwiZyI6IkEifSwiY3V0LXdvcmRzIjp7InEiOiJOYW1lIGEgd29yZCBOZXdzcGVhayBnZXRzIHJpZCBvZi4iLCJzaG9ydCI6IkN1dCBmcm9tIE5ld3NwZWFrIiwiZyI6IkIifSwiZGV2aWNlcyI6eyJxIjoiTmFtZSBhIGRldmljZSBvciBhcHAgdGhhdCBjb3VsZCB3YXRjaCBvciBsaXN0ZW4gdG8geW91LiIsInNob3J0IjoiV2F0Y2hlcyB5b3UiLCJnIjoiRCJ9LCJvcndlbGwtY291bnRyaWVzIjp7InEiOiJOYW1lIGEgY291bnRyeSBHZW9yZ2UgT3J3ZWxsIGxpdmVkIGluLiIsInNob3J0IjoiT3J3ZWxsIGNvdW50cnkiLCJnIjoiQyJ9LCJ2aWN0b3J5Ijp7InEiOiJOYW1lIHNvbWV0aGluZyBjYWxsZWQgXCJWaWN0b3J5XCIgaW4gMTk4NC4iLCJzaG9ydCI6IlwiVmljdG9yeVwiIHRoaW5nIiwiZyI6IkEifSwiYXJyZXN0ZWQiOnsicSI6Ik5hbWUgc29tZW9uZSBpbiAxOTg0IHdobyBnZXRzIGFycmVzdGVkIG9yIHZhcG9yaXplZC4iLCJzaG9ydCI6IkFycmVzdGVkIiwiZyI6IkEifSwiam9icyI6eyJxIjoiTmFtZSBhIGpvYiBzb21lb25lIGhhcyBpbiAxOTg0LiIsInNob3J0IjoiMTk4NCBqb2IiLCJnIjoiQSJ9LCJjcmltZS10aGluayI6eyJxIjoiTmFtZSBhIE5ld3NwZWFrIHdvcmQgd2l0aCBcImNyaW1lXCIgb3IgXCJ0aGlua1wiIGluIGl0LiIsInNob3J0IjoiQ3JpbWUgb3IgdGhpbmsiLCJnIjoiQiJ9LCJyb29tIjp7InEiOiJOYW1lIHNvbWV0aGluZyBpbiB0aGUgcm9vbSBhYm92ZSBNci4gQ2hhcnJpbmd0b24ncyBzaG9wLiIsInNob3J0IjoiUm9vbSBhYm92ZSBzaG9wIiwiZyI6IkEifSwibG9uZG9uIjp7InEiOiJOYW1lIGEgcmVhbCBwbGFjZSBpbiBMb25kb24uIiwic2hvcnQiOiJMb25kb24gcGxhY2UiLCJnIjoiRCJ9LCJpbnNwaXJhdGlvbnMiOnsicSI6Ik5hbWUgYSByZWFsIHBlcnNvbiBvciB0aGluZyB0aGF0IGluc3BpcmVkIDE5ODQuIiwic2hvcnQiOiJJbnNwaXJlZCAxOTg0IiwiZyI6IkMifSwic2hvcnRhZ2VzIjp7InEiOiJOYW1lIHNvbWV0aGluZyBwZW9wbGUgcnVuIHNob3J0IG9mIGluIDE5ODQuIiwic2hvcnQiOiJSdW5uaW5nIHNob3J0IiwiZyI6IkEifSwicG9zdGVycyI6eyJxIjoiTmFtZSBhIHNsb2dhbiBmcm9tIGEgV29ybGQgV2FyIEkgb3IgSUkgcG9zdGVyLiIsInNob3J0IjoiV2FyIHBvc3RlciIsImciOiJEIn0sInN1cGVyc3RhdGVzIjp7InEiOiJOYW1lIGEgc3VwZXJzdGF0ZSwgb3IgYSBwbGFjZSB0aGUgc3VwZXJzdGF0ZXMgZmlnaHQgb3Zlci4iLCJzaG9ydCI6IlN1cGVyc3RhdGUiLCJnIjoiQSJ9LCJ0ZWxlc2NyZWVuIjp7InEiOiJOYW1lIHNvbWV0aGluZyB0aGF0IHBsYXlzIG9uIGEgdGVsZXNjcmVlbi4iLCJzaG9ydCI6Ik9uIHRoZSB0ZWxlc2NyZWVuIiwiZyI6IkEifSwid29yZHMtdG9kYXkiOnsicSI6Ik5hbWUgYSB3b3JkIG9yIHBocmFzZSBmcm9tIE9yd2VsbCB0aGF0IHBlb3BsZSBzdGlsbCB1c2UuIiwic2hvcnQiOiJTdGlsbCBpbiB1c2UiLCJnIjoiRCJ9LCJhbmltYWwtZmFybSI6eyJxIjoiTmFtZSBhbiBhbmltYWwgaW4gQW5pbWFsIEZhcm0uIiwic2hvcnQiOiJBbmltYWwgRmFybSIsImciOiJDIn0sImNyaW1lcyI6eyJxIjoiTmFtZSBzb21ldGhpbmcgdGhhdCBjYW4gZ2V0IHlvdSBhcnJlc3RlZCBpbiBPY2VhbmlhLiIsInNob3J0IjoiR2V0cyB5b3UgYXJyZXN0ZWQiLCJnIjoiQSJ9LCJidWlsZGluZ3MiOnsicSI6Ik5hbWUgYSBidWlsZGluZyBvciB0b3dlciBvdmVyIDMwMCBtZXRlcnMgdGFsbC4iLCJzaG9ydCI6Ik92ZXIgMzAwIG0iLCJnIjoiRCJ9LCJvcndlbGwtam9icyI6eyJxIjoiTmFtZSBhIGpvYiBHZW9yZ2UgT3J3ZWxsIGhhZCBiZXNpZGVzIHdyaXRlci4iLCJzaG9ydCI6Ik9yd2VsbCBqb2IiLCJnIjoiQyJ9fX0="), function (c) { return c.charCodeAt(0); })));
+  var API = "https://shawnee-minitrue.netlify.app"; // the game server holds the answers and the high scores
+  var ROUND_MS = 25000, PENALTY_MS = 3000, LOW_MS = 8000, GRACE_MS = 6000;
+  var $ = function (id) { return document.getElementById(id); };
+  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+  // Which day. A link ending #day1, #day2... opens that set as a practice run that doesn't go on the board.
+  var today = E.nyDate(new Date());
+  var todayNum = E.dayNumber(today, DATA.epoch);
+  var dayNum = todayNum, practice = false;
+  var hm = /^#day([1-9]\d*)$/.exec(location.hash || "");
+  if (hm) {
+    var asked = parseInt(hm[1], 10);
+    if (asked <= todayNum) { practice = true; dayNum = asked; }
+  }
+  var setIds = DATA.days[(dayNum - 1) % DATA.days.length];
+  var KEY = "minitrue:" + today;
+
+  function newRunId() {
+    try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+    return (Date.now().toString(36) + Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 12)).slice(0, 32);
+  }
+  function fresh() { return { v: 1, day: dayNum, run: newRunId(), round: 0, phase: "rules", deadline: 0, misses: [], results: [], posted: "" }; }
+  var state = null;
+  function load() {
+    if (practice) return fresh();
+    try {
+      var s = JSON.parse(store(KEY) || "null");
+      if (s && s.v === 1 && s.day === dayNum && Array.isArray(s.results)) return s;
+    } catch (e) {}
+    return fresh();
+  }
+  function save() { if (!practice) store(KEY, JSON.stringify(state)); }
+
+  function points() { return state.results.reduce(function (n, r) { return n + r.pts; }, 0); }
+  function fmt(n) { return n.toLocaleString("en-US"); }
+
+  // ----- the Ministry of Truth -----
+  // Twelve terraces. Terrace j covers x from 30+22j to 570-22j, 8 units tall; the apex is at x 300.
+  // Winston walks from the street (X0, 0 m) up the left face to the apex (X1, 300 m).
+  var X0 = 20, X1 = 300;
+  function ridgeY(x) {
+    if (x < 30) return 128;
+    return 120 - 8 * Math.min(11, Math.floor((x - 30) / 22), Math.floor((570 - x) / 22));
+  }
+  function rect(x, y, w, h, c, cls) { return '<rect' + (cls ? ' class="' + cls + '"' : "") + ' x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="' + c + '"></rect>'; }
+  function sprite(rows, colors, ox, oy, px) {
+    var out = "";
+    rows.forEach(function (row, r) {
+      for (var c = 0; c < row.length; c++) if (colors[row[c]]) out += rect(ox + c * px, oy + r * px, px, px, colors[row[c]]);
+    });
+    return out;
+  }
+  // A small stepped pyramid: center x, base y, half width, height, step size, two tones.
+  function ziggurat(cx, base, half, h, step, lit, shade) {
+    var out = "", levels = Math.floor(h / step);
+    for (var j = 0; j < levels; j++) {
+      var w = half - Math.round(j * (half - step) / levels), y = base - (j + 1) * step;
+      out += rect(cx - w, y, w, step, lit) + rect(cx, y, w, step, shade);
+    }
+    return out;
+  }
+  var SLOGANS = ["WAR IS PEACE", "FREEDOM IS SLAVERY", "IGNORANCE IS STRENGTH"];
+  var SLOGAN_X = 262, SLOGAN_Y = [80, 92, 104];
+  var MAN = [
+    "......ppp.",
+    "..hh..prp.",
+    ".hhhs.plp.",
+    "..sss.ppp.",
+    "..bbbss...",
+    ".bbbbb....",
+    ".bdbbb....",
+    "..bbb.....",
+    "..b.b.....",
+    ".bb..b....",
+    ".b....b...",
+    "kk....kk.."
+  ];
+  var MAN_C = { h: "#5f574f", s: "#ffccaa", b: "#29adff", d: "#1d6fb8", k: "#11131a", p: "#fff1e8", l: "#a9aab7", r: "#ff004d" };
+  var HELI = [
+    "rrrrrrrrrrr.",
+    ".....m......",
+    "...bbbbb....",
+    "..wwbbbbbbbt",
+    "...bbbbb...t",
+    "...k...k....",
+    "..kkkkkkk..."
+  ];
+  var HELI_C = { r: "#c2c3c7", m: "#8a8d9b", b: "#7b7f92", w: "#29adff", t: "#7b7f92", k: "#a9aab7" };
+
+  function drawScene() {
+    var out = "";
+    // Sky: a cold grey April, darker at the top.
+    [["#1b1d26", 0, 28], ["#242734", 28, 52], ["#2f3342", 52, 76], ["#3d4152", 76, 100], ["#4d5164", 100, 128]].forEach(function (b) { out += rect(0, b[1], 360, b[2] - b[1], b[0]); });
+    [[8, 18, 70], [96, 40, 54], [150, 12, 40], [20, 62, 46]].forEach(function (s) { out += rect(s[0], s[1], s[2], 2, "#3a3e4f"); });
+    [[40, 8], [130, 30], [18, 46], [74, 70], [118, 58], [200, 6], [240, 22]].forEach(function (s) { out += rect(s[0], s[1], 2, 2, "#6b6f82"); });
+    // The other three Ministries, far off in the haze.
+    out += ziggurat(8, 112, 16, 20, 4, "#5d6073", "#535669");
+    out += ziggurat(52, 116, 26, 30, 4, "#666a7d", "#5a5e71");
+    out += ziggurat(106, 116, 30, 42, 4, "#6f7386", "#63677a");
+    // Ruined London at street level, propped with timber.
+    [[0, 98, 10, 30], [10, 106, 8, 22], [18, 94, 12, 34], [26, 110, 6, 18]].forEach(function (b) { out += rect(b[0], b[1], b[2], b[3], "#23252f"); });
+    out += rect(4, 96, 2, 2, "#23252f") + rect(20, 92, 4, 2, "#23252f") + rect(14, 104, 2, 2, "#23252f");
+    [[12, 112], [14, 108], [22, 100], [22, 108], [26, 116]].forEach(function (w, k) { out += rect(w[0], w[1], 2, 2, k % 3 ? "#3a3d4a" : "#b08d2e"); });
+    for (var t = 0; t < 5; t++) out += rect(30 - t * 2, 118 + t * 2, 2, 2, "#5a4334");
+    // A poster on the ruin: a watching eye.
+    out += rect(1, 100, 8, 12, "#ff004d") + rect(2, 104, 6, 4, "#fff1e8") + rect(4, 105, 2, 2, "#11131a") + rect(1, 110, 8, 2, "#6e0f2c");
+    // The street.
+    out += rect(0, 128, 360, 4, "#14151c") + rect(0, 128, 360, 1, "#2a2c37");
+    // The Ministry of Truth: twelve terraces of white concrete, lit on the left, shaded on the right.
+    for (var j = 0; j < 12; j++) {
+      var L = 30 + 22 * j, R = 570 - 22 * j, y = 120 - 8 * j;
+      out += rect(L, y, Math.min(300, R) - L, 8, "#e6e2dc") + rect(300, y, Math.max(0, R - 300), 8, "#b9b8c0");
+      out += rect(L, y, Math.min(300, R) - L, 2, "#fffaf2") + rect(300, y, Math.max(0, R - 300), 2, "#cdccd3");
+      // Rows of windows: three thousand rooms above ground. Leave the slogans clear.
+      for (var x = L + 4; x < Math.min(R, 360) - 2; x += 6) {
+        if (x > 192 && x < 334 && y + 4 > 68 && y + 4 < 108) continue;
+        out += rect(x, y + 4, 2, 2, x < 300 ? "#8f8c9a" : "#7b7a87");
+      }
+    }
+    // Glints on the white concrete.
+    [[90, 114], [150, 90], [210, 66], [262, 44], [318, 60], [180, 106]].forEach(function (g) { out += rect(g[0], g[1], 2, 2, "#ffffff", "glint"); });
+    // The three slogans, picked out on the white face.
+    SLOGANS.forEach(function (s, k) { out += '<text class="slogan" x="' + SLOGAN_X + '" y="' + SLOGAN_Y[k] + '" text-anchor="middle">' + s + "</text>"; });
+    // Height marks every 100 meters.
+    [100, 200, 300].forEach(function (m) {
+      var x = Math.round((X0 + (X1 - X0) * m / 300) / 2) * 2, y = ridgeY(x), top = m === 300;
+      out += rect(x + 8, y - 12, 2, 12, "#5f574f") + rect(x + 10, y - 12, 8, 5, "#ff004d");
+      out += '<text class="lbl" x="' + (top ? x + 14 : x - 2) + '" y="' + (y + 12) + '" text-anchor="' + (top ? "end" : "start") + '">' + m + "M</text>";
+    });
+    $("bg").innerHTML = out;
+    $("heli").innerHTML = sprite(HELI, HELI_C, 36, 18, 2) + rect(46, 30, 2, 2, "#ff004d", "lamp");
+    $("climber").innerHTML = sprite(MAN, MAN_C, -10, -24, 2);
+  }
+  function placeWinston(p, instant) {
+    var f = Math.min(1, p / E.MAX_POINTS);
+    var x = Math.round((X0 + (X1 - X0) * f) / 2) * 2, g = $("climber");
+    if (instant) g.style.transition = "none";
+    g.style.transform = "translate(" + x + "px," + ridgeY(x) + "px)";
+    if (instant) { void g.getBoundingClientRect(); g.style.transition = ""; }
+    $("altNum").textContent = fmt(E.meters(p));
+    $("scene").setAttribute("aria-label", "Winston carrying a paper up the Ministry of Truth, at " + E.meters(p) + " meters");
+  }
+
+  var VIEWS = ["startCard", "playCard", "endCard", "boardCard"];
+  function show(id) { VIEWS.forEach(function (v) { $(v).hidden = v !== id; }); }
+  function dayText() { return (practice ? "Practice, day " : "Day ") + dayNum; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function renderLadder() {
+    $("ladder").innerHTML = E.ORDER.map(function (t) {
+      return '<li><span class="chip" data-t="' + t + '">' + E.TIERS[t].name + "<b>" + E.TIERS[t].pts + "</b></span></li>";
+    }).join("");
+  }
+
+  // ----- checking a guess -----
+  function check(val) {
+    return fetch(API + "/api/guess", {
+      method: "POST", headers: { "content-type": "text/plain" },
+      body: JSON.stringify({ day: state.day, round: state.round, run: state.run, guess: val })
+    }).then(function (r) {
+      return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "Error"); return j; });
+    });
+  }
+
+  // ----- a round -----
+  var raf = 0, busy = false, shownSecs = -1, blocks = [];
+  (function () {
+    var t = $("track");
+    for (var k = 0; k < ROUND_MS / 1000; k++) t.appendChild(document.createElement("span"));
+    blocks = t.children;
+  })();
+  function current() { return DATA.prompts[setIds[state.round]]; }
+
+  function startRound() {
+    var p = current();
+    state.phase = "play";
+    if (!state.deadline) state.deadline = Date.now() + ROUND_MS;
+    save();
+    show("playCard");
+    $("metaLabel").textContent = dayText();
+    $("groupLabel").textContent = DATA.groups[p.g];
+    $("roundLabel").textContent = (state.round + 1) + " of " + setIds.length;
+    $("promptText").textContent = p.q;
+    $("askArea").hidden = false;
+    $("resultArea").hidden = true;
+    $("feedback").textContent = "";
+    renderMisses();
+    setBusy(false);
+    shownSecs = -1;
+    var input = $("guess");
+    input.value = "";
+    input.focus();
+    tick();
+  }
+  function renderMisses() {
+    $("misses").innerHTML = state.misses.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("");
+  }
+  function setBusy(b) {
+    busy = b;
+    $("guess").disabled = b;
+    $("sendBtn").disabled = b;
+  }
+
+  function tick() {
+    cancelAnimationFrame(raf);
+    if (state.phase !== "play") return;
+    var left = state.deadline - Date.now();
+    if (left <= 0 && !busy) { finishRound(null); return; }
+    if (left <= -GRACE_MS) { setBusy(false); finishRound(null); return; }
+    left = Math.max(0, left);
+    var secs = Math.ceil(left / 1000);
+    if (secs !== shownSecs) {
+      shownSecs = secs;
+      for (var k = 0; k < blocks.length; k++) blocks[k].className = k < secs ? "" : "off";
+      $("timerNum").textContent = secs;
+    }
+    $("clock").classList.toggle("low", left <= LOW_MS);
+    raf = requestAnimationFrame(tick);
+  }
+
+  $("guessForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (state.phase !== "play" || busy) return;
+    var input = $("guess"), val = input.value.trim();
+    if (!val) return;
+    var k = E.norm(val);
+    if (state.misses.some(function (m) { return E.norm(m) === k; })) {
+      miss(input, "Already tried.");
+      return;
+    }
+    var round = state.round, slow = setTimeout(function () { if (busy) $("feedback").textContent = "Checking..."; }, 350);
+    setBusy(true);
+    check(val).then(function (res) {
+      clearTimeout(slow);
+      if (state.phase !== "play" || state.round !== round) return;
+      setBusy(false);
+      if (res.ok) { finishRound(res); return; }
+      state.misses.push(val);
+      state.deadline -= PENALTY_MS;
+      save();
+      renderMisses();
+      miss(input, res.multi ? "One answer at a time. Minus 3 seconds." : "Not on the record. Minus 3 seconds.");
+      if (state.deadline <= Date.now()) finishRound(null);
+    }, function () {
+      clearTimeout(slow);
+      if (state.phase !== "play" || state.round !== round) return;
+      setBusy(false);
+      $("feedback").textContent = "Can't reach the game. Check the connection and send again.";
+      input.focus();
+    });
+  });
+  function miss(input, msg) {
+    $("feedback").textContent = msg;
+    input.classList.remove("shake"); void input.offsetWidth; input.classList.add("shake");
+    input.focus();
+    input.select();
+  }
+
+  function finishRound(hit) {
+    cancelAnimationFrame(raf);
+    var t = hit ? hit.t : "miss";
+    state.results.push({ id: setIds[state.round], d: hit ? hit.d : "", t: t, pts: E.TIERS[t].pts, token: hit ? hit.token : "" });
+    state.phase = "result";
+    state.deadline = 0;
+    save();
+    renderResult();
+  }
+
+  function renderResult() {
+    var r = state.results[state.results.length - 1], p = DATA.prompts[r.id];
+    show("playCard");
+    $("metaLabel").textContent = dayText();
+    $("groupLabel").textContent = DATA.groups[p.g];
+    $("roundLabel").textContent = state.results.length + " of " + setIds.length;
+    $("promptText").textContent = p.q;
+    $("askArea").hidden = true;
+    $("resultArea").hidden = false;
+    $("resTier").dataset.t = r.t;
+    $("resTier").textContent = E.TIERS[r.t].name;
+    $("resGain").textContent = r.pts ? "+" + r.pts + " points" : "Winston stays put.";
+    var ans = $("resAnswer");
+    ans.textContent = r.d || "No answer this round";
+    ans.classList.toggle("none", !r.d);
+    placeWinston(points());
+    $("nextBtn").textContent = state.results.length >= setIds.length ? "See the day" : "Next prompt";
+    $("nextBtn").focus();
+  }
+
+  $("nextBtn").addEventListener("click", function () {
+    state.round = state.results.length;
+    state.misses = [];
+    if (state.round >= setIds.length) { state.phase = "done"; save(); renderEnd(); }
+    else { state.deadline = 0; startRound(); }
+  });
+
+  // ----- end of a climb -----
+  function squares() { return state.results.map(function (r) { return E.TIERS[r.t].emoji; }).join(""); }
+  function renderEnd() {
+    show("endCard");
+    var pts = points();
+    placeWinston(pts);
+    $("metaLabel").textContent = dayText();
+    $("endMode").hidden = !practice;
+    $("endMeters").textContent = fmt(E.meters(pts));
+    $("endBand").textContent = E.band(pts);
+    $("endSquares").textContent = squares();
+    $("copyMsg").textContent = "";
+    $("recap").innerHTML = state.results.map(function (r) {
+      var p = DATA.prompts[r.id];
+      return '<li><span class="dot" data-t="' + r.t + '"></span><span class="q">' + esc(p.short) + '</span><span class="a">' + esc(r.d || "none") + "</span></li>";
+    }).join("");
+    var canPost = !practice;
+    $("postForm").hidden = !canPost || !!state.posted;
+    var msg = $("postMsg");
+    msg.hidden = !(canPost && state.posted);
+    msg.className = "posted";
+    msg.textContent = state.posted ? "On the board as " + state.posted + "." : "";
+    if (canPost && !state.posted) {
+      var ini = $("initials");
+      ini.value = store("minitrue:initials") || "";
+      setTimeout(function () { ini.focus(); }, 50);
+    }
+  }
+  $("copyBtn").addEventListener("click", function () {
+    var txt = "Minitrue, " + dayText() + "\n" + squares() + "\n" + fmt(E.meters(points())) + " m, " + E.band(points()).toLowerCase();
+    var msg = $("copyMsg");
+    function fallback() {
+      var sel = window.getSelection(), range = document.createRange();
+      range.selectNodeContents($("endSquares"));
+      sel.removeAllRanges(); sel.addRange(range);
+      msg.textContent = "Copy didn't work here. The squares are selected.";
+    }
+    try { navigator.clipboard.writeText(txt).then(function () { msg.textContent = "Copied"; }, fallback); }
+    catch (e) { fallback(); }
+  });
+
+  $("initials").addEventListener("input", function () {
+    var v = this.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
+    if (v !== this.value) this.value = v;
+  });
+  $("postForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var ini = $("initials").value.toUpperCase(), msg = $("postMsg");
+    msg.className = "feedback";
+    if (!/^[A-Z]{3}$/.test(ini)) { msg.hidden = false; msg.textContent = "Initials are three letters."; return; }
+    $("postBtn").disabled = true;
+    fetch(API + "/api/score", {
+      method: "POST", headers: { "content-type": "text/plain" },
+      body: JSON.stringify({ day: state.day, run: state.run, initials: ini, tokens: state.results.map(function (r) { return r.token; }).filter(Boolean) })
+    }).then(function (r) {
+      return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "The scoreboard had a problem. Try again."); return j; });
+    }).then(function (j) {
+      store("minitrue:initials", ini);
+      state.posted = ini; save();
+      renderBoard(j.board, "today", ini);
+      openBoard("end");
+    }, function (e) {
+      msg.hidden = false;
+      msg.textContent = e && e.message && !/fetch|network/i.test(e.message) ? e.message : "Can't reach the scoreboard. Try again.";
+    }).then(function () { $("postBtn").disabled = false; });
+  });
+
+  $("againBtn").addEventListener("click", function () { state = fresh(); save(); placeWinston(0); startRound(); });
+
+  // ----- high scores -----
+  var boardData = null, boardTab = "today", boardFrom = "start", mine = "";
+  var ORD = ["1ST", "2ND", "3RD", "4TH", "5TH", "6TH", "7TH", "8TH", "9TH", "10TH"];
+  function renderBoard(data, tab, me) {
+    if (data) boardData = data;
+    if (tab) boardTab = tab;
+    if (me !== undefined) mine = me;
+    $("tabToday").setAttribute("aria-selected", boardTab === "today");
+    $("tabAll").setAttribute("aria-selected", boardTab === "all");
+    var rows = $("boardRows"), foot = $("boardFoot");
+    if (!boardData) { rows.innerHTML = '<li class="empty">LOADING...</li>'; foot.textContent = ""; return; }
+    var list = boardTab === "today" ? boardData.today : boardData.all;
+    rows.innerHTML = list.length ? list.map(function (r, k) {
+      return '<li' + (r.i === mine ? ' class="me"' : "") + '><span class="rank">' + ORD[k] + '</span><span class="who">' + esc(r.i) + '</span><span class="m">' + fmt(r.m) + " M</span></li>";
+    }).join("") : '<li class="empty">NO CLIMBS YET.<br>BE THE FIRST.</li>';
+    foot.textContent = boardTab === "today"
+      ? fmt(boardData.gamesToday) + (boardData.gamesToday === 1 ? " CLIMB" : " CLIMBS") + " TODAY"
+      : fmt(boardData.games) + (boardData.games === 1 ? " CLIMB" : " CLIMBS") + " SO FAR";
+  }
+  function openBoard(from) {
+    boardFrom = from;
+    $("boardPlay").textContent = from === "start" ? "Start the climb" : "Play again";
+    show("boardCard");
+    $("boardPlay").focus();
+  }
+  function fetchBoard() {
+    boardData = null;
+    renderBoard();
+    fetch(API + "/api/scores?day=" + todayNum).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !j.today) throw new Error("bad");
+      renderBoard(j);
+    }, function () {
+      $("boardRows").innerHTML = '<li class="empty">CAN\'T REACH THE<br>SCOREBOARD.</li>';
+    });
+  }
+  $("scoresBtn").addEventListener("click", function () { fetchBoard(); openBoard("start"); });
+  $("endScoresBtn").addEventListener("click", function () { mine = state.posted || store("minitrue:initials") || ""; fetchBoard(); openBoard("end"); });
+  $("tabToday").addEventListener("click", function () { renderBoard(null, "today"); });
+  $("tabAll").addEventListener("click", function () { renderBoard(null, "all"); });
+  $("boardBack").addEventListener("click", function () { if (boardFrom === "start") show("startCard"); else renderEnd(); });
+  $("boardPlay").addEventListener("click", function () {
+    if (state.phase === "done") { state = fresh(); save(); placeWinston(0); }
+    state.deadline = 0;
+    startRound();
+  });
+
+  $("startBtn").addEventListener("click", function () { state.deadline = 0; startRound(); });
+
+  // ----- boot -----
+  drawScene();
+  renderLadder();
+  state = load();
+  $("metaLabel").textContent = dayText();
+  if (practice) $("startFine").textContent = "Practice run. It doesn't go on the board.";
+  placeWinston(points(), true);
+  if (state.phase === "done") renderEnd();
+  else if (state.phase === "result") renderResult();
+  else if (state.phase === "play") startRound();
+  else show("startCard");
+})();
+</script>
+</body>
+</html>
