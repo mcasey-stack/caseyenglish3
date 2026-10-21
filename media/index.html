@@ -90,8 +90,9 @@
   .art { border-top: 3px double var(--paper-ink); border-bottom: 1px solid var(--paper-ink); padding: 10px 0 12px; margin-bottom: 14px; }
   .art .t { font: 400 italic 23px/1.35 var(--serif); margin: 0 0 8px; }
   .art .by { font: 15px/1.5 var(--sans); color: var(--paper-dim); margin: 0 0 8px; }
-  .art a { font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--paper-ink); }
-  .card { background: var(--paper-lite); border: 1px solid var(--paper-rule); padding: 12px 16px; margin-bottom: 14px; }
+  .art a { font: 400 13px var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--paper-ink); margin-right: 16px; }
+  a.doc { font: 600 13px var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--red); white-space: nowrap; }
+  .card { background: var(--paper-lite); border: 1px solid var(--paper-rule); padding: 12px 16px; margin-bottom: 12px; }
   .card h3 { font: 600 18px var(--head); letter-spacing: .08em; text-transform: uppercase; margin: 0 0 4px; }
   .card .plain { font-family: var(--sans); font-size: 15.5px; line-height: 1.55; color: var(--paper-dim); margin: 0 0 10px; }
   textarea {
@@ -108,7 +109,7 @@
   .status.ok { color: var(--ok); font-weight: 600; }
   .linkout { width: 100%; font: 13px/1.4 var(--sans); color: var(--paper-dim); background: #f3efe4; border: 1px solid var(--paper-rule); padding: 6px 8px; margin-top: 8px; }
   .steps { margin: 0; padding-left: 22px; font: 16.5px/1.6 var(--sans); }
-  .steps li { margin-bottom: 6px; }
+  .steps li { margin-bottom: 2px; }
   .ppl dt { font: 600 15px var(--head); letter-spacing: .08em; text-transform: uppercase; margin-top: 12px; }
   .ppl dd { margin: 0; font-size: 16px; line-height: 1.6; }
   /* notes */
@@ -225,6 +226,9 @@ const SRC = {
   MARS:    [`AFP (French)`, `https://www.sudradio.fr/societe/a-marseille-des-manifestants-ont-penetre-brievement-dans-le-hall-de-la-mairie`],
   PSELEC:  [`Public Sénat (French)`, `https://www.publicsenat.fr/actualites/politique/la-prochaine-election-presidentielle-aura-lieu-les-18-avril-et-2-mai-2027`]
 };
+const DOC = `https://docs.google.com/document/d/1Rpk0EHujoVG-hbgh2hV7520mGf20KmQ4b-HVOIdzakw/edit?usp=sharing`;
+const docLink = t => `<a class="doc" href="${DOC}" target="_blank" rel="noopener">${t} &#8599;</a>`;
+const TEACHER = location.hash === `#teacher`;
 const src = k => `<a class="src" href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]}</a>`;
 
 /* ---------- sections of the article ---------- */
@@ -333,7 +337,7 @@ const P = [
   marks: [`They have pointed to`, `that they said were unfairly selective`],
   note: `<p>Here are the students’ complaints, and they’re concrete. But they arrive secondhand: “they have pointed to,” “they said.”</p><p>Count the quotes in the whole article. Seven, from four men: Lecornu (three), Mélenchon (two), Darmanin (one), Nuñez (one). Three run the government. One wants to. Students quoted: zero. The movement that started all of this never speaks for itself.</p>`,
   check: `Count it yourself. Find every pair of quotation marks in the article and write down who is speaking. (“Yellow vest” is a name, not a quote.)`,
-  push: `An explainer summarizes. Reporters often quote protesters in separate stories, and one article can’t prove a habit. To make that charge stick, you’d have to check the paper’s other coverage.`,
+  push: `An explainer summarizes, and one article can’t prove a habit. This one links to two earlier Times stories on the school protests, from Oct. 2 and Oct. 7. Check whether students speak there before you call it a pattern.`,
   think: `Why might a newspaper quote officials more than protesters? List reasons that aren’t bias. Then list reasons that are.`,
   see: [29] },
 
@@ -544,7 +548,7 @@ function renderText(d, i) {
   let L = kick;
   if (FOUND[i]) L += `<p class="${cls}">${marked(FOUND[i], d.marks)}</p>`;
   else if (loadText()) L += clip + `<p class="hint">This paragraph isn’t in your copy. The Times updates this page, so yours may be a different version.</p>`;
-  else L += `<div class="card"><h3>Load the article first</h3><p class="plain">Open the class copy from Google Classroom. Select all, copy, and paste it here. It loads by itself and stays on this device.</p>
+  else L += `<div class="card"><h3>Load the article first</h3><p class="plain">This public site holds only the notes, not the Times article. ${docLink(`Open the class copy`)}, select all, copy, and paste it here. It loads by itself and stays on this device.</p>
       <textarea id="paste" aria-label="Paste the article"></textarea><div class="row"><span class="status" id="status" aria-live="polite">Nothing loaded yet.</span></div></div>` + clip;
   L += `<div class="card think"><p class="kicker">Think about it</p><p>${d.think}</p></div>`;
   $(`left`).innerHTML = L;
@@ -564,12 +568,12 @@ function renderBrief(d) {
       <p class="kicker">Reading 01 · Start here</p>
       <div class="art">
         <p class="t">Huge Riots and Antigovernment Protests in France: What to Know</p>
-        <p class="by">The New York Times keeps updating this page, and earlier versions have different numbers and wording. This room reads the version that reports Tuesday, Oct. 20, 2026.</p>
-        <a href="${SRC.NYT[1]}" target="_blank" rel="noopener">Open the article &#8599;</a>
+        <p class="by">The Times keeps changing this article. This room reads the Oct. 20, 2026, version.</p>
+        ${docLink(`Read the class copy`)}<a href="${SRC.NYT[1]}" target="_blank" rel="noopener">The Times page &#8599;</a>
       </div>
       <div class="card">
         <h3>Load the article</h3>
-        <p class="plain">Paste your class copy here. Each paragraph lands next to its note. Your copy stays on this device.</p>
+        <p class="plain">Why the extra step? The New York Times owns this article, and this site is open to anyone online. So the site holds only the notes and the short phrases they discuss. The article comes from your class copy. ${docLink(`Open it`)}, select all, copy, and paste it here. It stays on this device.</p>
         <textarea id="paste" aria-label="Paste the article">${esc(loadText())}</textarea>
         <div class="row">
           <button class="btn" type="button" id="load">Load</button>
@@ -577,12 +581,12 @@ function renderBrief(d) {
           <span class="status ${has && got === P.length ? `ok` : ``}" id="status" aria-live="polite">${has ? status(got) : `Nothing loaded yet.`}</span>
         </div>
       </div>
-      <div class="card">
+      ${TEACHER ? `<div class="card">
         <h3>Teachers: make a class link</h3>
         <p class="plain">After you load your copy, this makes one link that opens the room with the article already in it. Post it in Google Classroom. Anyone with the link can read your copy, so keep it in Classroom.</p>
         <div class="row"><button class="btn" type="button" id="mklink">Make and copy the link</button><span class="status" id="linkst" aria-live="polite"></span></div>
         <input class="linkout" id="linkout" type="text" readonly hidden aria-label="Class link">
-      </div>
+      </div>` : ``}
       <h2>How to read it</h2>
       <ol class="steps">
         <li>Load the article above, if your class link didn’t already.</li>
