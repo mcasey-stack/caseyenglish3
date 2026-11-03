@@ -75,8 +75,8 @@ h2 { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spaci
 .rules { list-style: none; }
 .rules li {
   display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: baseline;
-  padding: 8px 0; border-bottom: 1px solid var(--paper-2);
-  font-family: var(--serif); font-size: 21px; font-weight: 600; line-height: 1.3;
+  padding: 5px 0; border-bottom: 1px solid var(--paper-2);
+  font-family: var(--serif); font-size: 20px; font-weight: 600; line-height: 1.3;
 }
 .rules li:last-child { border-bottom: none; }
 .rules .num { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--line); }
@@ -88,6 +88,8 @@ h2 { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spaci
 }
 .result b { font-weight: 600; }
 .result p + p { margin-top: 8px; }
+.cite { font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-dim); white-space: nowrap; }
+.source { margin-top: 12px; font-size: 13px; line-height: 1.5; color: var(--ink-mid); }
 @media (max-width: 560px) {
   header { padding: 14px 0 12px; }
   .rules li { font-size: 19px; padding: 6px 0; }
@@ -125,9 +127,10 @@ h2 { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spaci
       <li><span class="num">06</span><span>Phones go in the caddy.</span></li>
     </ol>
     <div class="result">
-      <p>Break rules 1 to 5 and you get an <b>after-school detention</b>. Your family will be told.</p>
-      <p>Phones follow district rules: a <b>warning</b> the first time, a <b>detention</b> the second, then the office takes over.</p>
+      <p>Break rules 1 to 5 and you get an <b>after-school detention</b>. Your family will be told. <span class="cite">R 5600: <a href="r5600-behavioral-guidelines.pdf#page=25">sec. I.5</a>, <a href="r5600-behavioral-guidelines.pdf#page=5">item 9</a>, <a href="r5600-behavioral-guidelines.pdf#page=1">sec. B</a></span></p>
+      <p>Phones follow district rules: a <b>warning</b> the first time, a <b>detention</b> the second, then the office takes over. <span class="cite">R 5600: <a href="r5600-behavioral-guidelines.pdf#page=7">item 19</a></span></p>
     </div>
+    <p class="source">Source: Lenape Regional Board of Education, <a href="r5600-behavioral-guidelines.pdf">Regulation 5600: Behavioral Guidelines</a> (PDF), revised Aug. 26, 2026. The current version is always in the <a href="https://www.lrhsd.org/our-district/board-of-education/bylaws-and-policies-search">district policy search</a>.</p>
   </section>
 </main>
 
