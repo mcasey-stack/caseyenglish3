@@ -53,3 +53,6 @@
     0 0 14px rgba(27, 158, 87, 0.55),
     0 0 0 1px rgba(0, 0, 0, 0.55);
 }
+
+/* Text selection in the line colour (paint pass 2026-11-14). */
+::selection{background:#4FCB8B;color:#08140C}

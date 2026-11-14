@@ -68,6 +68,7 @@
   .left p { margin: 0 0 14px; }
   .left blockquote { margin: 0 0 14px 20px; padding-left: 14px; border-left: 3px solid var(--paper-rule); font-style: italic; }
   .left h2 { font: 600 22px var(--head); letter-spacing: .06em; text-transform: uppercase; margin: 0 0 16px; color: var(--paper-ink); }
+  .left .acts-cue { font: 400 15px/1.45 var(--sans, system-ui, sans-serif); color: var(--paper-dim); margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.12); }
   .left .kicker { font: 400 12px var(--head); letter-spacing: .2em; text-transform: uppercase; color: var(--paper-dim); margin: 0 0 4px; }
   .left .ref { color: var(--red); }
   .screen {
@@ -190,6 +191,7 @@
     .strip { order: 3; flex-basis: 100%; }
     nav .next { margin-left: auto; }
   }
+::selection{background:#4FCB8B;color:#08140C}
 </style>
 </head>
 <body>
@@ -708,16 +710,17 @@ function renderQuote(d, i) {
 }
 
 /* ---------- plot ---------- */
+const ACTS_CUE = `<p class="acts-cue">Assigned an activity? They're under the Activities tab.</p>`;
 function renderPlot(d) {
   $("loc").textContent = "";
   $("who").textContent = "";
   if (d.people) {
-    $("left").innerHTML = `<p class="kicker">Characters</p><h2>Who's Who</h2><dl class="ppl">` +
+    $("left").innerHTML = ACTS_CUE + `<p class="kicker">Characters</p><h2>Who's Who</h2><dl class="ppl">` +
       d.people.map(([n, t]) => `<dt>${n}</dt><dd>${t}</dd>`).join("") + `</dl>`;
     $("notes").innerHTML = note("Key terms", `<dl>${d.terms.map(([n, t]) => `<dt>${n}</dt><dd>${t}</dd>`).join("")}</dl>`);
     return;
   }
-  $("left").innerHTML = `<p class="kicker">Plot summary</p><h2>${d.title}</h2>` + d.ch.map(c =>
+  $("left").innerHTML = ACTS_CUE + `<p class="kicker">Plot summary</p><h2>${d.title}</h2>` + d.ch.map(c =>
     `<div class="chap"><span class="cn">${c.n ? "Ch. " + c.n : "&sect;"}</span><div><p>${c.t}</p>${c.q ? `<span class="qs">${c.q.length > 1 ? "Quotes" : "Quote"}: ${qrefs(c.q)}</span>` : ""}</div></div>`).join("");
   $("notes").innerHTML = note("In one line", d.line) + note("Watch for", d.watch) +
     note("How to use this", `Each chapter gets a few sentences. The numbers under a chapter jump to its quotes, which have the close reading.`);
