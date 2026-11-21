@@ -79,6 +79,47 @@ html.hc body::after,
 html.hc body::before { display: none; }
 html.rm { --motion: 0; scroll-behavior: auto; }
 html.rm * { animation: none !important; transition: none !important; }
+/* System reduce-motion setting, no choice made with the Reduce motion button:
+   movement stops, glows (.m-gentle) keep going. Pressing it off (html.rm-off)
+   lets everything play. (2026-11-20) */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.rm-off) :not(.m-gentle),
+  html:not(.rm-off) :not(.m-gentle)::before,
+  html:not(.rm-off) :not(.m-gentle)::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Small touches (2026-11-20): the live station's signal pulses; a train runs
+   down the line, stopping at each station; a glint crosses the roundel. */
+.route .station.is-live::before { animation: lineSignal 2.6s ease-in-out infinite; }
+@keyframes lineSignal {
+  0%, 100% { filter: brightness(1); }
+  50%      { filter: brightness(1.45); }
+}
+.route-train {
+  position: absolute; left: 10px; top: 0; z-index: 3;
+  width: 11px; height: 26px; margin-top: -13px; border-radius: 6px;
+  background: var(--train, #fff);
+  box-shadow: 0 0 10px var(--train, #fff), 0 0 2px rgba(255,255,255,0.9) inset;
+  opacity: 0; pointer-events: none;
+}
+.route-train::before {
+  content: ""; position: absolute; left: 3px; right: 3px; bottom: 4px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.85);
+}
+@media (max-width: 640px) { .route-train { left: 6px; width: 9px; height: 22px; margin-top: -11px; } }
+.station-entrance .big-bullet { overflow: hidden; }
+.station-entrance .big-bullet::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.28) 50%, transparent 62%) no-repeat;
+  background-size: 250% 100%; background-position: 160% 0;
+  animation: bulletGlint 9s ease-in-out 1.5s infinite;
+}
+@keyframes bulletGlint { 0%, 82% { background-position: 160% 0; } 96%, 100% { background-position: -60% 0; } }
+
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -986,6 +1027,14 @@ document.querySelectorAll('[data-subway]').forEach(function(wrap){
       html.classList.toggle(cls, on);
       var b = document.getElementById(map[cls]);
       if (b) b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      // Reduce motion has three states: on (all still), off (all motion, even over a
+      // system reduce-motion setting), or unset, which follows the system: glows stay,
+      // movement stops, and the button reads as half-pressed.
+      if (cls === 'rm'){
+        var v = read('en3-rm');
+        html.classList.toggle('rm-off', v === '0');
+        if (b && v === null && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) b.setAttribute('aria-pressed', 'mixed');
+      }
     });
   }
   Object.keys(map).forEach(function(cls){
@@ -1032,5 +1081,49 @@ document.querySelectorAll('.trailer-toggle').forEach(function(btn){
 });
 </script>
 
+<script>
+/* Small touches (2026-11-20): a train runs down the line and stops at each station.
+   Movement, so it runs only when motion is on in full. */
+(function(){
+  function mode(){
+    var v = null; try { v = localStorage.getItem('en3-rm'); } catch(_){}
+    if (v === '1') return 'still';
+    if (v === '0') return 'full';
+    return (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'gentle' : 'full';
+  }
+  var live = document.querySelector('.route .station.is-live');
+  if (live) live.classList.add('m-gentle');
+  var route = document.querySelector('.route');
+  if (!route || !Element.prototype.animate) return;
+  var stations = route.querySelectorAll('.station');
+  if (stations.length < 2) return;
+  var train = document.createElement('span');
+  train.className = 'route-train'; train.setAttribute('aria-hidden', 'true');
+  route.appendChild(train);
+  try { train.style.setProperty('--train', getComputedStyle(route, '::before').backgroundColor); } catch(_){}
+  var anim = null;
+  function build(){
+    if (anim) { anim.cancel(); anim = null; }
+    if (mode() !== 'full') return;
+    var top0 = route.getBoundingClientRect().top, ys = [];
+    stations.forEach(function(st){ var r = st.getBoundingClientRect(); ys.push(r.top - top0 + r.height / 2); });
+    var hop = 900, dwell = 650, n = ys.length, run = (n - 1) * (hop + dwell) + dwell, rest = 5000, total = run + rest;
+    var frames = [], t = 0;
+    function at(y, o, time){ frames.push({ transform: 'translateY(' + y.toFixed(1) + 'px)', opacity: o, offset: Math.min(1, time / total), easing: 'ease-in-out' }); }
+    at(ys[0], 0, 0); at(ys[0], 1, 250);
+    for (var i = 0; i < n; i++){
+      t = i * (hop + dwell);
+      if (i) at(ys[i], 1, t);
+      at(ys[i], 1, t + dwell);
+    }
+    at(ys[n - 1], 0, run + 300); at(ys[0], 0, total);
+    anim = train.animate(frames, { duration: total, iterations: Infinity, delay: 1200 });
+  }
+  var rt = null;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(build, 200); });
+  document.querySelectorAll('#btn-rm, #btn-reset').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(build, 0); }); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(build); else build();
+})();
+</script>
 </body>
 </html>
