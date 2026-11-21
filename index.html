@@ -1091,8 +1091,7 @@ document.querySelectorAll('.trailer-toggle').forEach(function(btn){
     if (v === '0') return 'full';
     return (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'gentle' : 'full';
   }
-  var live = document.querySelector('.route .station.is-live');
-  if (live) live.classList.add('m-gentle');
+  document.querySelectorAll('.route .station.is-live').forEach(function(st){ st.classList.add('m-gentle'); });
   var route = document.querySelector('.route');
   if (!route || !Element.prototype.animate) return;
   var stations = route.querySelectorAll('.station');
